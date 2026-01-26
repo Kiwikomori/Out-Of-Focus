@@ -1,0 +1,22 @@
+#door {
+    top: 100px;
+    left: 15px;
+}
+
+#lock {
+    top: 300px;
+    left: 67px;
+    width: 170px;
+}
+
+div {
+    border: solid 2px red;
+    width: 50rem;
+    position: relative;
+    padding: 1rem;
+    height: 80vh;
+}
+
+div > img {
+    position: absolute;
+}
