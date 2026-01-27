@@ -9,6 +9,12 @@
     width: 170px;
 }
 
+#osumi {
+    top: 200px;
+    left: 200px;
+    width: 400px;
+}
+
 div {
     border: solid 2px red;
     width: 50rem;
