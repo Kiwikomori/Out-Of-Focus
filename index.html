@@ -7,13 +7,16 @@
     <title>IP Assignment</title>
 </head>
 <body>
+    <main id="game">
     <h1>Out Of Focus</h1>
-    <div class="flexbox">
-       <img src="images/image.png" alt="door" id="door">
-       <img src="images/lock.png" alt="lock" id="lock">
-       <img src="images/characters/osumi_1.png" alt="osumi1" id="osumi" onClick="osumichange()">
-    </div>
-
+        <div id="room">
+            <img src="images/image.png" alt="door" id="door">
+            <img src="images/lock.png" alt="lock" id="lock">
+            <img src="images/characters/osumi_1.png" alt="osumi1" id="osumi" onClick="osumichange()">
+        </div>
+    </main>
+    <div id="small">Your browser is too small to play this game. Try resizing it!</div>
+    <div id="touch">It appears you're using a touch device. Please play this game with a desktop and mouse!</div>
 </body>
 <script src="script.js"></script>
 </html>
