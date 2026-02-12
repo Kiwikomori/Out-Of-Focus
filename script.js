@@ -40,5 +40,5 @@ function go(where) {
 
     // fade in
     fade.classList.remove('out');
-  }, 300); // duration of fade out
+  }, 450); // duration of fade out
 }
