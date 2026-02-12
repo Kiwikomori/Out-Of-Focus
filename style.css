@@ -111,7 +111,7 @@ a {
 
 /* =============== NORTH ROOM ELEMENTS =============== */
 #room {
-    background-image: url('images/gameAssets/rooms/north/northScene.svg');
+    background-image: url('images/gameAssets/rooms/north/northScene.png');
     background-size: fill;
     background-position: center;
 }
