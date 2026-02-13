@@ -363,6 +363,11 @@ body:has(#archivesbtn:checked) #archives {
     pointer-events: auto;
 }
 
+/* if archives is checked, disable pointer events and enable overlay */
+body:has(#archivesbtn:checked) #lockedOverlay {
+    display : block;
+}
+
 /* if collection is checked, show collection */
 body:has(#collectionbtn:checked) #collection {
     opacity: 1;
@@ -467,6 +472,45 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     font-style: italic;
     color: #ecdcbed0;
     padding-bottom: 40px;
+}
+
+.lockedText {
+    color: #ffffff;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 0 auto;
+}
+
+.archiveLock {
+    transform: scale(0.75);
+    display: block;
+    margin: 0 auto;
+}
+
+/* blur overlay */
+#lockedOverlay{
+    display:none;
+    margin-top: 300px;
+    align-items: end;
+    height: 225%;
+    position: absolute;
+    background-color: #000000cc;
+    backdrop-filter: blur(6px);
+    inset: 0;
+    z-index: 9900;
+    pointer-events: none;  /* blocks clicks on the text */
+}
+
+/* controls height it starts sticking */
+.stickyContainer{
+  margin-top: 200px; 
+}
+
+/* controls position of sticky elements */
+.lockedSticky {
+    position: sticky;
+    top: 400px;
+    transform: translateY(-50%);
 }
 
 /* =============== COLLECTION =============== */
