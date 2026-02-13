@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 
 #game {
@@ -362,8 +363,14 @@ body:has(#archivesbtn:checked) #archives {
     pointer-events: auto;
 }
 
-/* when back is checked, hide archives */
-body:has(#back:checked) #archives {
+/* if collection is checked, show collection */
+body:has(#collectionbtn:checked) #collection {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* when back is checked, hide archives & collection */
+body:has(#back:checked) #archives, body:has(#back:checked) #collection {
   opacity: 0;
   pointer-events: none;
 }
@@ -373,20 +380,18 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
 }
 
 /* =============== ARCHIVES SCREEN =============== */
-/* TODO: Archives Screen */
 #divider {
     transform: scale(1.75);
 }
 
 .archiveText {
-    margin-top: 20px;
     font-size: 12px;
 
 }
 
 .archiveHeader {
     font-size: 32px;
-    margin: 16px 0 16px 0;
+    margin: 16px 0 0 0;
 }
 
 #archives {
@@ -409,15 +414,28 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
 .scrollable {
     text-align: center;
     background-color: #000000c2;
-    padding: 20px 50px 50px 50px;
-    margin: 50px;
+    margin: 30px 50px 30px 50px;
     border-radius: 20px;
     width: 640px;
     height: 400px;
     position: relative;
     border: 2px solid #9BD5ED;
     /* enable scrolling */
-    overflow-y: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+}
+
+.scrollWrap {
+    position: absolute;
+    padding: 30px 50px 20px 50px;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: -15px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 /* text align left, but keep the entire thing centered */
@@ -430,9 +448,38 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     width: 200px;
 }
 
-#osumiBio {
-    gap: 10px;
+.charName {
+    font-size: 25px;
+    font-style: normal;
+    margin: 10px 0 9px 0;
+    color: #ffd890;
+}
+
+.charBio {
+    gap: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: "Philosopher", sans-serif;
+    font-style: italic;
+    color: #ecdcbed0;
+    padding-bottom: 50px;
+}
+
+/* =============== COLLECTION =============== */
+
+#collection {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/collectionbg.svg');
+    background-size: cover;
+    /* hidden by default */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 9999;
 }
