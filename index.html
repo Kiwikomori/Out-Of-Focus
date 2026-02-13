@@ -41,6 +41,9 @@
     <main id="game">
         <nav id="navi">
             <!-- navigation here -->
+            <button type="button" onClick="go('left')" id="navLeft"><img src="images/gameAssets/leftArrow.svg"draggable="false"></button>
+            <button type="button" onClick="go('right')" id="navRight"><img src="images/gameAssets/rightArrow.svg" draggable="false"></button>
+            <button type="button" onClick="exitBackrooms()" id="navBack"><img src="images/gameAssets/downArrow.svg" draggable="false"></button>
         </nav>
         <div id="room">
             <!-- NORTH ROOM -->
@@ -76,9 +79,6 @@
 
         <!-- fade out animation for switching rooms -->
         <div id="fade"></div>
-        <button type="button" onClick="go('left')" id="navLeft">LEFT</button>
-        <button type="button" onClick="go('right')" id="navRight">RIGHT</button>
-        <button type="button" onClick="exitBackrooms()" id="navBack">Back</button>
     </main>
     <div id="small">Your browser is too small to play this game. Try resizing it!</div>
     <div id="touch">It appears you're using a touch device. Please play this game with a desktop and mouse!</div>
