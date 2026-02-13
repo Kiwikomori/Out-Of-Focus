@@ -386,7 +386,13 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
 
 .archiveHeader {
     font-size: 32px;
-    margin: 16px 0 16px 0;
+    margin: 20px 0 0 0;
+    text-align: center;
+}
+
+.archiveSubheader {
+    font-size: 20px;
+    margin: 20px 0 0 0;
 }
 
 #archives {
@@ -431,6 +437,13 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
 }
 
 #osumiBio {
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#estellaBio {
     gap: 10px;
     display: flex;
     justify-content: center;
