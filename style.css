@@ -395,12 +395,6 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     text-align: center;
 }
 
-.archiveSubheader {
-    font-size: 20px;
-    margin: 20px 0 0 0;
-    margin: 16px 0 0 0;
-}
-
 #archives {
     position: fixed;
     inset: 0;
@@ -434,6 +428,7 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     scrollbar-width: thin;
 }
 
+/* 2 divs to hide the scrollbars */
 .scrollWrap {
     position: absolute;
     padding: 30px 50px 20px 50px;
@@ -467,17 +462,10 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-#estellaBio {
-    gap: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-family: "Philosopher", sans-serif;
     font-style: italic;
     color: #ecdcbed0;
-    padding-bottom: 50px;
+    padding-bottom: 40px;
 }
 
 /* =============== COLLECTION =============== */
