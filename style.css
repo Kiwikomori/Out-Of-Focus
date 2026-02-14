@@ -718,11 +718,12 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     position: absolute;
     bottom: 0px;
     text-align: center;
+
+    display: none;
 }
 
 /* to center the items */
 #playerDialogueWrap {
-    
     display: grid;
     place-items: center;
     background: #000000;

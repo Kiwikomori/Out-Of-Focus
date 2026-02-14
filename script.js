@@ -147,41 +147,115 @@ document.addEventListener("DOMContentLoaded", () => {
     const vnView = document.getElementById("vnView");
     const dialogueText = document.getElementById("day1D");
     const characterImg = document.getElementById("osumiVn");
+    const playerText = document.getElementById("day1PD");
+    const playerElement = document.getElementById("playerDialogue");
+    const npcArrow = document.getElementById("dialogueArrow");
+
     const day1dialogue = [
         {
-            text: "Oh hello! I wasn't expecting a camera repair shop of all things to open up here, in such a tucked away and hidden spot.",
-            img: "images/characters/osumi_1.png"
+          speaker: "npc",
+          text: "Oh hello! I wasn't expecting a camera repair shop of all things to open up here, in such a tucked away and hidden spot.",
+          img: "images/characters/osumi_1.png"
         },
         {
-            text: "Still, I suppose hidden places are the most interesting ones.",
-            img: "images/characters/osumi_3.png"
+          speaker: "npc",
+          text: "Still, I suppose hidden places are the most interesting ones.",
+          img: "images/characters/osumi_3.png"
         },
         {
-            text: "Are you the owner here?",
-            img: "images/characters/osumi_1.png"
+          speaker: "npc",
+          text: "Are you the owner here?",
+          img: "images/characters/osumi_1.png"
         },
         {
-            text: "I actually have something I need fixed...",
-            img: "images/characters/osumi_2.png"
-        }
+          speaker: "npc",
+          text: "I actually have something I need fixed...",
+          img: "images/characters/osumi_2.png"
+        },
+        {
+          speaker: "npc",
+          text: "Just need it cleaned up, I don't really want the memories in them anyway, so I'll take the risk.",
+          img: "images/characters/osumi_1.png"
+        },
+        {
+          speaker: "player",
+          text: "Oh, don't worry. You won't lose any of the memories in the camera."
+        },
+        {
+          speaker: "player",
+          text: "My shop offers to transfer the memories to this Dreamstone crystal, for a cheaper price."
+        },
+        {
+          speaker: "npc",
+          text: "Woah! I never knew that can be done, that's so cool!",
+          img: "images/characters/osumi_2.png"
+        },
+        {
+          speaker: "npc",
+          text: "But if you HAVE to, can I at least pick the ones I don't want?",
+          img: "images/characters/osumi_3.png"
+        },
+        {
+          speaker: "player",
+          text: "It's possible, but it would come at a decently higher price.",
+        },
+        {
+          speaker: "npc",
+          text: "Oh..",
+          img: "images/characters/osumi_3.png"
+        },
+        {
+          speaker: "npc",
+          text: "Forget it, then. Just put it all into that crystal memory thingy you said.",
+          img: "images/characters/osumi_1.png"
+        },
+        {
+          speaker: "player",
+          text: "Dreamstone. Anyways, remember to come back at the end of the day to collect your camera.",
+        },
+        {
+          speaker: "npc",
+          text: "Wait what? Come back?",
+          img: "images/characters/osumi_3.png"
+        },
+        {
+          speaker: "npc",
+          text: "I'm kind of in a hurry, can I just...",
+          img: "images/characters/osumi_1.png"
+        },
+        {
+          speaker: "npc",
+          text: "...watch you do it?",
+          img: "images/characters/osumi_2.png"
+        },
     ];
 
-    let currentIndex = 0;
+    let currentIndex = 1;
 
     vnView.addEventListener("click", () => {
-      // next dialogue
-        currentIndex++;
+      const current = day1dialogue[currentIndex];
+          if (current.speaker === "npc") {
+            playerElement.style.display = "none";
+            npcArrow.style.display = "block";
 
-        // if there is still dialogue left in the list, keep going
-        if (currentIndex < day1dialogue.length) {
-            dialogueText.textContent = day1dialogue[currentIndex].text;
-            characterImg.src = day1dialogue[currentIndex].img;
-        } else {
-          // restarts dialogue to loop again, will change later
-            currentIndex = 0;
-            dialogueText.textContent = day1dialogue[0].text;
-            characterImg.src = day1dialogue[0].img;
-        }
+            dialogueText.textContent = current.text;
+            characterImg.src = current.img;
+
+            currentIndex++;
+          }
+
+          else if (current.speaker === "player") {
+            playerElement.style.display = "block";
+            npcArrow.style.display = "none";
+
+            playerText.textContent = current.text;
+
+            currentIndex++;
+          }
+
+          else if (current.speaker === "choice") {
+            showChoices(current.options);
+          }
     });
 });
 
