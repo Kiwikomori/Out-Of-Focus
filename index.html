@@ -26,37 +26,40 @@
     </section>
 
     <section id="collection">
-        <div class="collectionBack"> 
-            <input type="checkbox" id="back">
-            <label for="back">Back</label>
+        <div id="collectionBack"> 
+            <input type="checkbox" id="back" >
+            <label for="back" class="backStyle">Back</label>
         </div> <!-- back button-->
-        <div class="collectionContent">
-
-
-            <img src="images/collection_shelf.svg" alt="shelf" id="shelf" draggable="false">
+        <div id="collectionContent">
+            <div id="collectionMain">
+                <!--shelf image-->
+                <img src="images/collection_shelf.svg" alt="shelf" id="collectionShelf" draggable="false">
             
-            <!--Camera preview, not blacked out-->
-            <div class="cameraPreview">
-                <img src="images/estellaCamera.svg" alt="estellaCamera" draggable="false" class="estellaCamera">
-                <img src="images/osumiCamera.svg" alt="osumiCamera" draggable="false" class="osumiCamera">
-            </div>
+                <!--Camera preview, not blacked out-->
+                <div class="cameraPosition" id="cameraPreview">
+                    <img src="images/estellaCamera.svg" alt="estellaCamera" draggable="false" id="estellaCamera">
+                    <img src="images/osumiCamera.svg" alt="osumiCamera" draggable="false" id="osumiCamera">
+                </div>
 
-            <!--Camera siloette, blacked out-->
-            <div class="cameraSiloettes">
-                <img src="images/estellaCameraSil.svg" alt="estellaCamera" draggable="false" class="estellaCamera">
-                <img src="images/osumiCameraSil.svg" alt="osumiCamera" draggable="false" class="osumiCamera">
-            </div>
+                <!--Camera siloette, blacked out-->
+                <div class="cameraPosition" id="cameraSiloette">
+                    <img src="images/estellaCameraSil.svg" alt="estellaCamera" draggable="false" id="estellaCamera">
+                    <img src="images/osumiCameraSil.svg" alt="osumiCamera" draggable="false" id="osumiCamera">
+                </div>
+
+            </div> <!-- collectionMain-->
+
+            <!-- 3D model viewer popup-->
+            <div id="viewerContainer">
+                <!-- 3D model of Estella's camera-->
+                <model-viewer alt="cameraEstella" src="models/antiqueCamera.glb" shadow-intensity="1" camera-controls id="estellaCamModel" class="modelViewer"></model-viewer>
+                <!--osumi's camera model-->
+                <model-viewer alt="cameraOsumi" src="models/modernCamera.glb" shadow-intensity="1" camera-controls id="osumiCamModel" class="modelViewer"></model-viewer>
+            </div> 
+
+        </div> <!-- collection content-->
 
 
-
-
-        </div> <!--divider for shelf and camera-->
-
-        <div>
-        <!-- To Do: popup like archives to contain the camara models-->
-        <!-- 3D model of Estella's camera-->
-        </div>
-        <model-viewer alt="cameraEstella" src="models/antiqueCamera.glb" shadow-intensity="1" camera-controls ></model-viewer>
     </section>
 
     <section id="archives">
@@ -64,7 +67,7 @@
             <div class="scrollable">
                 <div class="scrollWrap">
                     <input type="checkbox" id="back">
-                    <label for="back">Back</label>
+                    <label for="back" class="backStyle">Back</label>
                     <div><img src="images/divider.svg" alt="archivesDivider" id="divider" draggable="false"></div> <!-- top divider-->
                     <div class="textblock">
 
@@ -73,7 +76,7 @@
                         <p class="archiveText">Kiwikomori is an independent game development team known for creating immersive and atmospheric games that blend narrative depth with unique visual styles. Founded by a passionate solo developer, Kiwikomori has gained recognition for its ability to craft engaging experiences that resonate with players on an emotional level.<br><br>
                         The studio's games often explore themes of isolation, self-discovery, and the human condition, drawing players into richly detailed worlds filled with memorable characters and thought-provoking stories. Kiwikomori's commitment to quality and innovation has earned it a dedicated fanbase and critical acclaim within the indie game community.</p>
 
-
+                        <div><img src="images/divider.svg" alt="archivesDivider" id="divider" draggable="false"></div>
 
                         <!-- Character Bios-->
                         <p class="archiveHeader" style="text-align: center;">Characters</p>
