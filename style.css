@@ -417,6 +417,13 @@ body:has(#back:checked) #archives, body:has(#back:checked) #collection {
   pointer-events: none;
 }
 
+/* closes model viewer if back is checked */
+body:has(#back:checked) #viewerGroup, body:has(#back:checked) .modelViewer, body:has(#back:checked) #viewerContainer, body:has(#back:checked) #exitViewerButton {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+}
+
 body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     opacity: 1;
 }
@@ -613,6 +620,11 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     pointer-events: none; /* disable interaction when hidden */
     width: 850px;
     height: 600px; 
+}
+
+#viewerGroup{
+    display: none; /* hidden by default */
+    pointer-events: none; /* disabled by default*/
 }
 
 #viewerContainer {
