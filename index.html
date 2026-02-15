@@ -57,9 +57,9 @@
                 <div id="exitViewerButton"><img src="images/exitIcon.svg" alt="exitViewer"></div> 
                 <div id="viewerContainer">
                     <!-- Estella's camera model-->
-                    <model-viewer alt="cameraEstella" src="models/antiqueCamera.glb" shadow-intensity="1" camera-controls id="estellaCamModel" class="modelViewer"></model-viewer>
+                    <model-viewer alt="cameraEstella" src="models/antiqueCamera.glb" shadow-intensity="1" camera-controls id="estellaCamModel" class="modelViewer" poster="images/loading.svg"></model-viewer>
                     <!--Osumi's camera model-->
-                    <model-viewer alt="cameraOsumi" src="models/camera.glb" shadow-intensity="1" camera-controls id="osumiCamModel" class="modelViewer"></model-viewer>
+                    <model-viewer alt="cameraOsumi" src="models/camera.glb" shadow-intensity="1" camera-controls id="osumiCamModel" class="modelViewer" poster="images/loading.svg"></model-viewer>
                 </div> 
              </div>
 
@@ -199,10 +199,19 @@
                 <img src="images/gameAssets/vn/vnCounter.svg" draggable="false" id="vnCounter">
 
                 <div id="playerDialogue">
-                    <div id="playerDialogueWrap">
-                        <div id="playerRow">
+                    <div class="playerDialogueWrap">
+                        <div class="playerRow">
                             <p id="day1PD"></p>
-                            <div id="playerDialogueArrow"></div>
+                            <div class="playerDialogueArrow"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="playerChoice">
+                    <div class="playerDialogueWrap">
+                        <div class="playerRow">
+                            <p id="day1PC"></p>
+                            <div class="playerDialogueArrow"></div>
                         </div>
                     </div>
                 </div>
@@ -220,6 +229,7 @@
 <!--
 <dotlottie-wc src="https://lottie.host/48ec130e-494f-4763-8374-fd58c19b0cb5/OkUB8yLHhU.lottie" style="width: 300px;height: 300px" autoplay loop></dotlottie-wc>
 -->
+
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 <!-- Import model-viewer -->
 </html>

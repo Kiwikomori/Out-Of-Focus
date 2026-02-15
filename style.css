@@ -658,6 +658,16 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     left: -490px;
 }
 
+#loading {
+    position: absolute;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+}
+
 /* =============== VISUAL NOVEL =============== */
 #vnView {
     /* hidden by default */
@@ -743,7 +753,7 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
 }
 
 /* to center the items */
-#playerDialogueWrap {
+.playerDialogueWrap {
     display: grid;
     place-items: center;
     background: #000000;
@@ -753,12 +763,12 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     padding-top: 20px;
 }
 
-#playerRow {
+.playerRow {
     display: flex;
     flex-direction: row;
 }
 
-#playerDialogueArrow {
+.playerDialogueArrow {
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 8px solid #ffffffe3;

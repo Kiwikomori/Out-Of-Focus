@@ -150,6 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const playerText = document.getElementById("day1PD");
     const playerElement = document.getElementById("playerDialogue");
     const npcArrow = document.getElementById("dialogueArrow");
+    //const playerChoiceElement = getElementById("playerChoice");
+    //const playerChoiceTxt = getElementById("day1PC");
 
     const day1dialogue = [
         {
@@ -269,7 +271,7 @@ function openViewer(which) {
     viewerGroup.style.display = "block";
     viewerGroup.style.opacity = "1";
     viewerGroup.style.pointerEvents = "auto";
-    
+
     estellaCamModel.style.display = (which === "estella") ? "block" : "none";
     estellaCamModel.style.pointerEvents = (which === "estella") ? "auto" : "none";
     
