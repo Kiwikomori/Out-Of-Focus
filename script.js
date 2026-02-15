@@ -374,9 +374,9 @@ function openViewer(which) {
 //==============PUZZLES==============
 //Simon memory game
 
-/*REMOVE THIS COMMENT
+/*REMOVE THIS COMMENT PLEASE
 
-// ====== CONFIG ======
+// ====== CONFIG ====== 
 const TOTAL_BUTTONS = 10;
 const SHOW_MS = 10000;       // how long numbers are visible before hiding
 const WINS_NEEDED = 2;
