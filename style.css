@@ -750,7 +750,9 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     bottom: 0px;
     text-align: center;
 
-    display: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.2s ease-in-out;
 }
 
 /* to center the items */
@@ -770,7 +772,7 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     gap: 5px;
 }
 
-.playerDialogueArrow {
+#playerDialogueArrow {
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 8px solid #ffffffe3;
@@ -837,7 +839,32 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     top: 11px;
 }
 
-/*---------------Game Puzzles---------------*/
+#osumivnCamera {
+    bottom: 90px;
+    left: 240px;
+    transition: 0.2s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#osumivnCamera:hover {
+    filter: drop-shadow(0 0 2px #000000);
+    transition: 0.1s ease-in-out;
+}
+
+#vnCameraView {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#vnCameraView.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* =============== PUZZLE GAME =============== */
 /*Simon game*/
 .buttonCenter{
     position: absolute;

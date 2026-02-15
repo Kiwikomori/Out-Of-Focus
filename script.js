@@ -69,6 +69,17 @@ function visibilityCheck() {
   }
 }
 
+function openVnCamera() {
+  const cam = document.getElementById("osumivnCamera");
+  const camView = document.getElementById("vnCameraView");
+
+  camView.classList.add("active");
+  startRound();
+  // prevent interaction if not enabled
+  if (!cam.classList.contains("active")) return;
+}
+
+
 function enterBackrooms() {
   
   if (rooms[currentRoom] === 'southFront') {
@@ -155,7 +166,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const npcArrow = document.getElementById("dialogueArrow");
     const npcElement = document.getElementById("dialogueWrap");
 
-
     const day1dialogue = [
         {
           speaker: "npc",
@@ -175,7 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
         {
           speaker: "npc",
           text: "Just need it cleaned up, I don't really want the memories in them anyway, so I'll take the risk.",
-          img: "images/characters/osumi_1.png"
+          img: "images/characters/osumi_1.png",
+          // put down camera here
+          action: "placeCamera",
         },
         {
           speaker: "player",
@@ -299,40 +311,73 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     vnView.addEventListener("click", () => {
+
+      if (currentIndex >= currentDialogue.length) {
+
+        npcArrow.style.display = "none";
+        npcElement.style.display = "none";
+
+        setTimeout(() => {
+          document.getElementById("osumivnCamera").style.opacity = "1";
+          document.getElementById("osumivnCamera").style.pointerEvents = "auto";
+          document.getElementById("playerDialogueArrow").style.opacity = "0";
+
+          playerElement.style.opacity = "1";
+          playerElement.style.pointerEvents = "auto";
+
+          playerText.textContent = "Alright, let's check this camera.";
+        }, 900);
+
+        return;
+      }
+
+
+      if (currentIndex >= currentDialogue.length) {
+        setTimeout(() => {
+          document.getElementById("osumivnCamera").style.opacity = "1";
+      }, 200); // delay after dialogue ends
+        return;
+      }
+      
       const current = currentDialogue[currentIndex];
       const playerChoice = document.getElementById("playerChoice");
 
       // dont current index up if i didnt click any choice
       if (playerChoice.style.display === "block") return;
 
+          if (current.action === "placeCamera") {
+            setTimeout(() => {
+              document.getElementById("osumivnCamera").style.opacity = "1";
+            }, 200);
+          }
   
           if (current.speaker === "npc") {
-            playerElement.style.display = "none";
+            playerElement.style.opacity = "0";
             npcArrow.style.display = "block";
             npcElement.style.display = "block";
 
 
             dialogueText.textContent = current.text;
             characterImg.src = current.img;
+            currentIndex++;
           }
 
           else if (current.speaker === "player") {
-            playerElement.style.display = "block";
+            playerElement.style.opacity = "1";
+            playerElement.style.pointerEvents = "auto";
             npcArrow.style.display = "none";
 
             playerText.textContent = current.text;
+            currentIndex++;
           }
 
           else if (current.speaker === "choice") {
             npcArrow.style.display = "none";
-            playerElement.style.display = "none";
+            playerElement.style.opacity = "0";
             npcElement.style.display = "none";
             showChoices(current.options);
+            return;
           }
-          currentIndex++;
-
-          // add on this part; osumi puts camera on counter
-          if (!current) return;
 
     });
 });
@@ -371,10 +416,8 @@ function openViewer(which) {
 
   document.getElementById("exitViewerButton")?.addEventListener("click", closeViewer);
 
-//==============PUZZLES==============
-//Simon memory game
-
-/*REMOVE THIS COMMENT PLEASE
+// ==============PUZZLES==============
+// Simon memory game
 
 // ====== CONFIG ====== 
 const TOTAL_BUTTONS = 10;
@@ -403,9 +446,6 @@ const buttons = Array.from({ length: TOTAL_BUTTONS }, (_, i) =>
 buttons.forEach((btn) => {
   btn.addEventListener("click", () => handleClick(btn));
 });
-
-// start game
-startRound();
 
 // ====== GAME FLOW ======
 function startRound() {
@@ -538,4 +578,3 @@ function shuffle(arr) {
   }
   return arr;
 }
-*/

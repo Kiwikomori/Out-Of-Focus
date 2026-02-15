@@ -8,27 +8,6 @@
 </head>
 <body>
     <section id="title">
-        <!-- REMOVE THIS COMMENT
-        <div id="sequenceMemoryPuzzle">
-                <img src="images/gameAssets/puzzles/cameraSimon.png" alt="simonGame" draggable="false">
-            <div class="lightsCenter">
-                <img src="images/gameAssets/puzzles/greenIndicator.svg" alt="greenLight" draggable="false" class="lights" id="greenLight1">
-                <img src="images/gameAssets/puzzles/greenIndicator.svg" alt="greenLight" draggable="false" class="lights" id="greenLight2">
-            </div>
-            <div class="buttonCenter">
-                <div id="button1" class="simonButtonStyle"></div>
-                <div id="button2" class="simonButtonStyle"></div>
-                <div id="button3" class="simonButtonStyle"></div>
-                <div id="button4" class="simonButtonStyle"></div>
-                <div id="button5" class="simonButtonStyle"></div>
-                <div id="button6" class="simonButtonStyle"></div>
-                <div id="button7" class="simonButtonStyle"></div>
-                <div id="button8" class="simonButtonStyle"></div>
-                <div id="button9" class="simonButtonStyle"></div>
-                <div id="button10" class="simonButtonStyle"></div>
-            </div>
-        </div> 
-        -->
                 <div>
                     <img src="images/coverPage/title.svg" alt="title" id="titleimg" draggable="false">
                     <input type="checkbox" id="startgame">
@@ -218,12 +197,13 @@
                 <div id="dialogueArrow"></div>
                 </div>
                 <img src="images/gameAssets/vn/vnCounter.svg" draggable="false" id="vnCounter">
+                <img src="images/gameAssets/vn/osumiCamera.svg" draggable="false" id="osumivnCamera" onClick="openVnCamera()">
 
                 <div id="playerDialogue">
                     <div class="playerDialogueWrap">
                         <div class="playerRow">
                             <p id="day1PD" class="playerDialoguetxt"></p>
-                            <div class="playerDialogueArrow"></div>
+                            <div id="playerDialogueArrow"></div>
                         </div>
                     </div>
                 </div>
@@ -237,6 +217,29 @@
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section id="vnCameraView">
+                <img src="images/gameAssets/vn/table.svg" draggable="false">
+                <div id="sequenceMemoryPuzzle">
+                <img src="images/gameAssets/puzzles/cameraSimon.png" alt="simonGame" draggable="false">
+            <div class="lightsCenter">
+                <img src="images/gameAssets/puzzles/greenIndicator.svg" alt="greenLight" draggable="false" class="lights" id="greenLight1">
+                <img src="images/gameAssets/puzzles/greenIndicator.svg" alt="greenLight" draggable="false" class="lights" id="greenLight2">
+            </div>
+            <div class="buttonCenter">
+                <div id="button1" class="simonButtonStyle"></div>
+                <div id="button2" class="simonButtonStyle"></div>
+                <div id="button3" class="simonButtonStyle"></div>
+                <div id="button4" class="simonButtonStyle"></div>
+                <div id="button5" class="simonButtonStyle"></div>
+                <div id="button6" class="simonButtonStyle"></div>
+                <div id="button7" class="simonButtonStyle"></div>
+                <div id="button8" class="simonButtonStyle"></div>
+                <div id="button9" class="simonButtonStyle"></div>
+                <div id="button10" class="simonButtonStyle"></div>
+            </div>
+        </div> 
             </section>
         </div>
 
