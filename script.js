@@ -4,9 +4,58 @@ const marimba_audio = new Audio("audios/completedMarimba.mp3");
 const failHum_audio = new Audio("audios/failedHum.mp3");
 const enterBell_audio = new Audio("audios/enterBell.mp3");
 
-function osumichange() {
-    document.getElementById("osumi").src = "images/characters/osumi_2.png";
+let currentDialogue = [];
+let currentIndex = 0;
+
+function advanceDialogue() {
+    const dialogueText = document.getElementById("day1D");
+    const characterImg = document.getElementById("osumiVn");
+    const playerText = document.getElementById("day1PD");
+    const playerElement = document.getElementById("playerDialogue");
+    const npcArrow = document.getElementById("dialogueArrow");
+    const npcElement = document.getElementById("dialogueWrap");
+
+  if (currentIndex >= currentDialogue.length) return;
+
+  const current = currentDialogue[currentIndex];
+  const playerChoice = document.getElementById("playerChoice");
+
+  if (playerChoice.style.display === "block") return;
+
+  if (current.action === "placeCamera") {
+    setTimeout(() => {
+      document.getElementById("osumivnCamera").style.opacity = "1";
+    }, 200);
+  }
+
+  if (current.speaker === "npc") {
+    playerElement.style.opacity = "0";
+    npcArrow.style.display = "block";
+    npcElement.style.display = "block";
+
+    dialogueText.textContent = current.text;
+    characterImg.src = current.img;
+    currentIndex++;
+  }
+
+  else if (current.speaker === "player") {
+    playerElement.style.opacity = "1";
+    playerElement.style.pointerEvents = "auto";
+    npcArrow.style.display = "none";
+
+    playerText.textContent = current.text;
+    currentIndex++;
+  }
+
+  else if (current.speaker === "choice") {
+    npcArrow.style.display = "none";
+    playerElement.style.opacity = "0";
+    npcElement.style.display = "none";
+    showChoices(current.options);
+    return;
+  }
 }
+
 
 /* get the back button element */
 const backBtn = document.getElementById('back');
@@ -72,13 +121,104 @@ function visibilityCheck() {
 function openVnCamera() {
   const cam = document.getElementById("osumivnCamera");
   const camView = document.getElementById("vnCameraView");
-
+  const playerElement = document.getElementById("playerDialogueCV");
+  const playerText = document.getElementById("d1playerDialogueCV");
+  playerElement.style.opacity = "0";
+  playerElement.style.pointerEvents = "none";
+  playerText.textContent = "";
   camView.classList.add("active");
-  startRound();
-  // prevent interaction if not enabled
+
+  // if not showing dont do anything 
+  if (playerElement.style.display === "none") return;
+
+  const cameraDialogue = [
+    "The parts are all over the place.",
+    "And they keep disappearing.",
+    "Looks like it's been shaken up really bad.",
+    "I better focus and remember their positions...",
+    "... Or they won't align properly."
+  ];
+
+  let dialogueIndex = 0;
+  setTimeout(() => {
+      document.getElementById("playerDialogueCVArrow").style.opacity = "1";
+      playerElement.style.opacity = "1";
+      playerElement.style.pointerEvents = "auto";
+      playerText.textContent = cameraDialogue[dialogueIndex];
+
+  }, 1500);
+
+  camView.addEventListener("click", function nextDialogue() {
+    dialogueIndex++;
+    if (dialogueIndex < cameraDialogue.length) {
+      playerText.textContent = cameraDialogue[dialogueIndex];
+    } else {
+      playerElement.style.opacity = "0";
+      playerElement.style.pointerEvents = "none";
+
+      // needs 2 arguments so i just added the function
+      camView.removeEventListener("click", nextDialogue);
+
+      startRound();
+    }
+  });
+  // prevent interaction if not enabled js in case
   if (!cam.classList.contains("active")) return;
 }
 
+function showChoices(options) {
+      const playerChoice = document.getElementById("playerChoice");
+      const choice1 = document.getElementById("choice1");
+      const choice2 = document.getElementById("choice2");
+
+      playerChoice.style.display = "block";
+
+      choice1.textContent = options[0].text;
+      choice2.textContent = options[1].text;
+
+      choice1.onclick = () => selectChoice(options[0]);
+      choice2.onclick = () => selectChoice(options[1]);
+    }
+
+      function selectChoice(options) {
+      const playerChoice = document.getElementById("playerChoice");
+
+      playerChoice.style.display = "none";
+
+      currentDialogue = options.nextDialogue;
+      currentIndex = 0;
+    }
+
+function playWinDialogue(lines, continueGame) {
+  const camView = document.getElementById("vnCameraView");
+  const playerElement = document.getElementById("playerDialogueCV");
+  const playerText = document.getElementById("d1playerDialogueCV");
+  const arrow = document.getElementById("playerDialogueCVArrow");
+  
+  if (playerElement.style.display === "none") return;
+
+  let index = 0;
+
+  playerElement.style.opacity = "1";
+  playerElement.style.pointerEvents = "auto";
+  arrow.style.opacity = "1";
+  playerText.textContent = lines[index];
+
+  function next() {
+    if (index < lines.length) {
+      playerText.textContent = lines[index];
+      index++;
+    } else {
+      camView.removeEventListener("click", next);
+      playerElement.style.opacity = "0";
+      playerElement.style.pointerEvents = "none";
+      arrow.style.opacity = "0";
+      continueGame(); // resume game flow
+    }
+  }
+
+  camView.addEventListener("click", next);
+}
 
 function enterBackrooms() {
   
@@ -283,32 +423,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
-    
-    let currentDialogue = day1dialogue;
-    let currentIndex = 0;
-
-    function showChoices(options) {
-      const playerChoice = document.getElementById("playerChoice");
-      const choice1 = document.getElementById("choice1");
-      const choice2 = document.getElementById("choice2");
-
-      playerChoice.style.display = "block";
-
-      choice1.textContent = options[0].text;
-      choice2.textContent = options[1].text;
-
-      choice1.onclick = () => selectChoice(options[0]);
-      choice2.onclick = () => selectChoice(options[1]);
-    }
-
-      function selectChoice(options) {
-      const playerChoice = document.getElementById("playerChoice");
-
-      playerChoice.style.display = "none";
-
-      currentDialogue = options.nextDialogue;
-      currentIndex = 0;
-    }
+    currentDialogue = day1dialogue;
+    currentIndex = 0;
 
     vnView.addEventListener("click", () => {
 
@@ -330,57 +446,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return;
       }
-
-
-      if (currentIndex >= currentDialogue.length) {
-        setTimeout(() => {
-          document.getElementById("osumivnCamera").style.opacity = "1";
-      }, 200); // delay after dialogue ends
-        return;
-      }
-      
-      const current = currentDialogue[currentIndex];
-      const playerChoice = document.getElementById("playerChoice");
-
-      // dont current index up if i didnt click any choice
-      if (playerChoice.style.display === "block") return;
-
-          if (current.action === "placeCamera") {
-            setTimeout(() => {
-              document.getElementById("osumivnCamera").style.opacity = "1";
-            }, 200);
-          }
-  
-          if (current.speaker === "npc") {
-            playerElement.style.opacity = "0";
-            npcArrow.style.display = "block";
-            npcElement.style.display = "block";
-
-
-            dialogueText.textContent = current.text;
-            characterImg.src = current.img;
-            currentIndex++;
-          }
-
-          else if (current.speaker === "player") {
-            playerElement.style.opacity = "1";
-            playerElement.style.pointerEvents = "auto";
-            npcArrow.style.display = "none";
-
-            playerText.textContent = current.text;
-            currentIndex++;
-          }
-
-          else if (current.speaker === "choice") {
-            npcArrow.style.display = "none";
-            playerElement.style.opacity = "0";
-            npcElement.style.display = "none";
-            showChoices(current.options);
-            return;
-          }
+    
+    advanceDialogue();
 
     });
 });
+
 // opening and closing 3dviewer
 function openViewer(which) {
     const viewerGroup = document.getElementById("viewerGroup");
@@ -535,7 +606,18 @@ function roundWin() {
   }
 
   // brief pause then new round
+  if (wins === 1) {
+  playWinDialogue([
+    "That was way harder than I thought.",
+    "...Do I really have to do another one?",
+    "This better be the last one... sigh..."
+  ], () => {
+    startRound();
+  });
+} else {
   setTimeout(() => startRound(), 1500);
+}
+
 }
 
 function roundFail() {
@@ -554,9 +636,9 @@ function gameComplete() {
   buttons.forEach((b) => (b.style.pointerEvents = "none"));
   marimba_audio.play();
 
-  // put your "minigame cleared" logic here:
-  // e.g. close puzzle UI, unlock next area, etc.
-  console.log("MINIGAME CLEARED ✅");
+  setTimeout(() => {
+    document.getElementById("vnCameraView").classList.remove("active");
+  }, 2500)
 }
 
 // ====== LIGHTS ======
@@ -579,23 +661,16 @@ function shuffle(arr) {
   return arr;
 }
 
-
-const lottieCursor = document.getElementById("lottieCursor");
-
-// Follow mouse
-document.addEventListener("pointermove", (e) => {
-  lottieCursor.style.left = `${e.clientX}px`;
-  lottieCursor.style.top = `${e.clientY}px`;
-});
-
-// Pulse on left click only
-document.addEventListener("pointerdown", (e) => {
-  if (e.button !== 0) return; // only left click (button 0)
+document.addEventListener("click", (e) => {
+  const pulse = document.createElement("div");
+  pulse.className = "click-pulse";
+  pulse.style.left = e.clientX + "px";
+  pulse.style.top = e.clientY + "px";
   
-  lottieCursor.classList.add("pulse");
-
-  // Remove pulse after animation ends so it can retrigger
-  setTimeout(() => {
-    lottieCursor.classList.remove("pulse");
-  }, 300);
+  document.body.appendChild(pulse);
+  
+  // Remove the element after animation ends
+  pulse.addEventListener("animationend", () => {
+    pulse.remove();
+  });
 });
