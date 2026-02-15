@@ -51,7 +51,9 @@ We wanted to set the world in a magical fantasy vibe as it woud open up to a lot
 <img width="1601" height="894" alt="image" src="https://github.com/user-attachments/assets/7bb8f0d0-6aec-4c23-b70f-c9644c2ec8a2" />
 <img width="1424" height="887" alt="image" src="https://github.com/user-attachments/assets/94e3a949-f6c1-4813-bdb4-0b7b13e9ebfe" />
 
-3. AI was used in helping out to fix certain parts of the code for our puzzles
+3. AI was used in helping out to fix and improvve certain parts of the code for our puzzles
+   <img width="925" height="599" alt="image" src="https://github.com/user-attachments/assets/0244b168-b6d1-4a9e-8440-98ed7c2bf943" />
+
 
 
 # Credits
