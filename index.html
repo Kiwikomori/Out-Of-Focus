@@ -9,16 +9,16 @@
 <body>
     <section id="title">
                 <div>
-                    <img src="images/title.svg" alt="title" id="titleimg" draggable="false">
+                    <img src="images/coverPage/title.svg" alt="title" id="titleimg" draggable="false">
                     <input type="checkbox" id="startgame">
                     <label for="startgame" class="glow">- Click to Start -</label>
 
                     <div id="lesserbuttons">
                         <input type="checkbox" id="collectionbtn">
-                        <label for="collectionbtn"><img src="images/collection.svg" alt="Collection" class="lesserbutton" draggable="false"></label>
+                        <label for="collectionbtn"><img src="images/coverPage/collection.svg" alt="Collection" class="lesserbutton" draggable="false"></label>
                         
                         <input type="checkbox" id="archivesbtn">
-                        <label for="archivesbtn"><img src="images/archives.svg" alt="Archives" draggable="false" class="lesserbutton"></label>
+                        <label for="archivesbtn"><img src="images/coverPage/archives.svg" alt="Archives" draggable="false" class="lesserbutton"></label>
                     </div>
 
                     <footer>A game by Kiwikomori</footer>
@@ -34,19 +34,19 @@
 
             <div id="collectionMain">
                 <!--shelf image-->
-                <img src="images/collection_shelf.svg" alt="shelf" id="collectionShelf" draggable="false">
+                <img src="images/collectionPage/collection_shelf.svg" alt="shelf" id="collectionShelf" draggable="false">
             
                 <!--Camera preview, not blacked out-->
                 <div class="cameraPosition" id="cameraPreview">
-                    <img src="images/estellaCamera.svg" alt="estellaCamera" draggable="false" id="estellaCamera" class="estellaCamera">
-                    <img src="images/osumiCamera.svg" alt="osumiCamera" draggable="false" id="osumiCamera" class="osumiCamera">
+                    <img src="images/collectionPage/estellaCamera.svg" alt="estellaCamera" draggable="false" id="estellaCamera" class="estellaCamera">
+                    <img src="images/collectionPage/osumiCamera.svg" alt="osumiCamera" draggable="false" id="osumiCamera" class="osumiCamera">
                 </div>
 
                 <!--REMEMBER TO UNCOMMENT THIS ONLY TAKE OUT SILHOUETTE WHEN BEATEN A LEVEL-->
                 <!--Camera silhouette, blacked out
                 <div class="cameraPosition" id="cameraSilhouoette">
-                    <img src="images/estellaCameraSil.svg" alt="estellaCamera" draggable="false" id="estellaCameraSil" class="estellaCamera">
-                    <img src="images/osumiCameraSil.svg" alt="osumiCamera" draggable="false" id="osumiCameraSil" class="osumiCamera">
+                    <img src="images/collectionPage/estellaCameraSil.svg" alt="estellaCamera" draggable="false" id="estellaCameraSil" class="estellaCamera">
+                    <img src="images/collectionPage/osumiCameraSil.svg" alt="osumiCamera" draggable="false" id="osumiCameraSil" class="osumiCamera">
                 </div>-->
 
             </div> <!-- collectionMain-->
@@ -54,7 +54,7 @@
             <!-- 3D model viewer popup-->
              <div id="viewerGroup">
                 <!-- Exit viewer button-->
-                <div id="exitViewerButton"><img src="images/exitIcon.svg" alt="exitViewer"></div> 
+                <div id="exitViewerButton"><img src="images/collectionPage/exitIcon.svg" alt="exitViewer"></div> 
                 <div id="viewerContainer">
                     <!-- Estella's camera model-->
                     <model-viewer alt="cameraEstella" src="models/antiqueCamera.glb" shadow-intensity="1" camera-controls id="estellaCamModel" class="modelViewer" poster="images/loading.svg"></model-viewer>
@@ -73,7 +73,7 @@
                     <input type="checkbox" id="back">
                     <label for="back" class="backStyle">Back</label>
 
-                    <div><img src="images/divider.svg" alt="archivesDivider" id="divider" draggable="false"></div>
+                    <div><img src="images/archive/divider.svg" alt="archivesDivider" id="divider" draggable="false"></div>
 
                     <div class="textblock">
 
@@ -82,7 +82,7 @@
                         <p class="archiveText">Kiwikomori is an independent game development team known for creating immersive and atmospheric games that blend narrative depth with unique visual styles. Founded by a passionate solo developer, Kiwikomori has gained recognition for its ability to craft engaging experiences that resonate with players on an emotional level.<br><br>
                         The studio's games often explore themes of isolation, self-discovery, and the human condition, drawing players into richly detailed worlds filled with memorable characters and thought-provoking stories. Kiwikomori's commitment to quality and innovation has earned it a dedicated fanbase and critical acclaim within the indie game community.</p>
 
-                        <div><img src="images/divider.svg" alt="archivesDivider" id="divider" draggable="false"></div>
+                        <div><img src="images/archive/divider.svg" alt="archivesDivider" id="divider" draggable="false"></div>
 
                         <!-- Character Bios-->
                         <p class="archiveHeader" style="text-align: center;">Characters</p>
@@ -124,7 +124,7 @@
                         <div id="lockedOverlay">
                             <div class="stickyContainer">
                                 <div class="lockedSticky">
-                                    <img class="archiveLock" src="images/archiveLock.svg" alt="lock_image" draggable="false">
+                                    <img class="archiveLock" src="images/archive/archiveLock.svg" alt="lock_image" draggable="false">
                                     <p class="lockedText">Complete the game to unlock character lore</p>
                                 </div>
                             </div>
