@@ -294,3 +294,163 @@ function openViewer(which) {
   document.getElementById("osumiCamera")?.addEventListener("click", () => openViewer("osumi"));
 
   document.getElementById("exitViewerButton")?.addEventListener("click", closeViewer);
+
+//==============PUZZLES==============
+
+//Simon memory game
+// ====== CONFIG ======
+const TOTAL_BUTTONS = 10;
+const SHOW_MS = 10000;       // how long numbers are visible before hiding
+const WINS_NEEDED = 2;
+
+// If you have number images 1.svg ... 10.svg:
+const numberImg = (n) => `images/gameAssets/puzzles/${n}.svg`;
+
+// If your 3 red lights are DOM elements, set them here.
+// Example HTML you might have: <div class="redLight" id="light1"></div> etc
+const greenLight1 = document.getElementById("greenLight1");
+const greenLight2 = document.getElementById("greenLight2");
+
+// ====== STATE ======
+let mapping = new Map();  // buttonEl -> number (1..10)
+let expected = 1;         // next number user must click
+let wins = 0;
+let acceptingClicks = false;
+
+// ====== SETUP BUTTONS ======
+const buttons = Array.from({ length: TOTAL_BUTTONS }, (_, i) =>
+  document.getElementById(`button${i + 1}`)
+).filter(Boolean);
+
+// attach click handlers
+buttons.forEach((btn) => {
+  btn.addEventListener("click", () => handleClick(btn));
+});
+
+// start game
+startRound();
+
+// ====== GAME FLOW ======
+function startRound() {
+  expected = 1;
+  acceptingClicks = false;
+
+  //reset lights properly
+  if (wins === 0) {
+  greenLight1.classList.remove("light-on");
+  greenLight2.classList.remove("light-on");
+  }
+
+  // clear outlines + reset visuals
+  buttons.forEach((b) => {
+    b.classList.remove("correct", "wrong", "hidden");
+    b.style.pointerEvents = "none";
+  });
+
+  // create shuffled numbers 1..10
+  const nums = shuffle([...Array(TOTAL_BUTTONS)].map((_, i) => i + 1));
+
+  // assign each button a number + set image
+  mapping.clear();
+  buttons.forEach((btn, idx) => {
+    const n = nums[idx];
+    mapping.set(btn, n);
+    btn.style.backgroundImage = `url("${numberImg(n)}")`;
+  });
+
+  // show for a bit, then hide
+  setTimeout(() => {
+    hideNumbers();
+    enableClicks();
+  }, SHOW_MS);
+}
+
+function hideNumbers() {
+  buttons.forEach((btn) => btn.classList.add("hidden"));
+}
+
+function enableClicks() {
+  acceptingClicks = true;
+  buttons.forEach((btn) => (btn.style.pointerEvents = "auto"));
+}
+
+// ====== CLICK LOGIC ======
+function handleClick(btn) {
+  if (!acceptingClicks) return;
+
+  const n = mapping.get(btn);
+
+  // reveal what they clicked 
+  btn.classList.remove("hidden");
+
+  if (n === expected) {
+    btn.classList.add("correct");
+    btn.style.pointerEvents = "none"; // prevent re-click
+
+    expected++;
+
+    if (expected === TOTAL_BUTTONS + 1) {
+      // round cleared
+      acceptingClicks = false;
+      roundWin();
+    }
+  } else {
+    // wrong click -> fail round
+    acceptingClicks = false;
+    btn.classList.add("wrong");
+    roundFail();
+  }
+}
+
+// ====== ROUND RESULTS ======
+function roundWin() {
+  wins++;
+  updateLights();
+
+  if (wins >= WINS_NEEDED) {
+    gameComplete();
+    return;
+  }
+
+  // brief pause then new round
+  setTimeout(() => startRound(), 900);
+}
+
+function roundFail() {
+  // reveal all numbers so they learn
+  buttons.forEach((b) => b.classList.remove("hidden"));
+  buttons.forEach((b) => (b.style.pointerEvents = "none"));
+
+  // restart a new round after short delay
+  setTimeout(() => startRound(), 1100);
+}
+
+function gameComplete() {
+  // reveal all
+  buttons.forEach((b) => b.classList.remove("hidden"));
+  buttons.forEach((b) => (b.style.pointerEvents = "none"));
+
+  // put your "minigame cleared" logic here:
+  // e.g. close puzzle UI, unlock next area, etc.
+  console.log("MINIGAME CLEARED ✅");
+}
+
+// ====== LIGHTS ======
+function updateLights() {
+  if (wins >= 1) {
+    greenLight1.classList.add("light-on");
+  }
+
+  if (wins >= 2) {
+    greenLight2.classList.add("light-on");
+  }
+}
+
+// ====== RANDOMISER ======
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}

@@ -784,3 +784,125 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     font-size: 14px;
     color: #ffffffe3;
 }
+
+/*---------------Game Puzzles---------------*/
+/*Simon game*/
+.buttonCenter{
+    position: absolute;
+    top:138px;
+    left: 50%;
+}
+
+.lightsCenter {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+}
+
+/*style for buttons*/
+.simonButtonStyle{
+  position:absolute;
+  width: 55px;
+  height: 55px;
+  background-color: rgba(0, 0, 0, 0);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.simonButtonStyle.hidden {
+  background-image: none !important;
+}
+
+.simonButtonStyle.correct {
+  background-color: rgba(0, 255, 0, 0.253);
+}
+
+.simonButtonStyle.wrong {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.lights {
+    position: absolute;
+}
+
+/* Lights default = red look */
+#greenLight1,
+#greenLight2 {
+    opacity: 0;   
+    transition: opacity 0.3s ease;
+}
+
+/* When player wins */
+.light-on {
+    opacity: 1;
+}
+
+/*positioning lights*/
+#greenLight1 {
+    top: 30px;
+    left: -66px;
+}
+
+#greenLight2 {
+    top: 30px;
+    left: -17px;
+}
+
+#offLight {
+    top: 30px;
+    left: 32px;
+}
+
+/*positioning buttons*/
+#button1{
+    top: 0;
+    left: -154px;
+    background-image: url(images/gameAssets/puzzles/1.svg);
+}
+
+#button2{
+    top: 0;
+    left: -95px;
+}
+
+#button3{
+    top: 0;
+    left: -36px;
+}
+
+#button4{
+    top: 0;
+    left: 28px;
+}
+
+#button5{
+    top: 0;
+    left: 90px;
+}
+
+#button6{
+    top: 62px;
+    left: -154px;
+}
+
+#button7{
+    top: 62px;
+    left: -95px;
+}
+
+#button8{
+    top: 62px;
+    left: -36px;
+}
+
+#button9{
+    top: 62px;
+    left: 28px;
+}
+
+#button10{
+    top: 62px;
+    left: 90px;
+}
