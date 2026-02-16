@@ -6,7 +6,8 @@ const enterBell_audio = new Audio("audios/enterBell.mp3");
 
 let currentDialogue = [];
 let currentIndex = 0;
-let memoryFinish = false;
+let dialogueMode = "intro"; 
+// "intro", "postgame", "findcrystal"
 
 function advanceDialogue() {
     const dialogueText = document.getElementById("day1D");
@@ -70,7 +71,8 @@ const backBtn = document.getElementById('back');
 /* navigation between rooms */
 const rooms = ['north', 'east', 'southFront', 'west'];
 let currentRoom = '0';
-let insideBR = false; // false by default
+let insideBR = false;
+// false by default
 
 function go(where) {
   const fade = document.getElementById('fade');
@@ -452,6 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
+    dialogueMode = "intro";
     currentDialogue = day1dialogue;
     currentIndex = 0;
 
@@ -459,6 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (currentIndex >= currentDialogue.length) {
 
+        if (dialogueMode === "intro") {
         npcArrow.style.display = "none";
         npcElement.style.display = "none";
 
@@ -474,6 +478,39 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 900);
 
         return;
+        }
+
+        else if (dialogueMode === "postgame") {
+          //  TODO: make the dialogue show.
+          dialogueMode = "findcrystal";
+
+          fade.classList.add('out');
+
+          setTimeout(() => {
+            // close vn view
+            document.getElementById("vnView").style.opacity = "0";
+            document.getElementById("vnView").style.pointerEvents = "none";
+
+            // show navigation view
+            document.getElementById("north").style.opacity = "1";
+            document.getElementById("north").style.pointerEvents = "auto";
+
+            document.getElementById("navLeft").style.display = "block";
+            document.getElementById("navRight").style.display = "block";
+
+            fade.classList.remove('out');
+
+            finishGame1Dialogue([
+              "Alright, I need to find a Dreamstone.",
+              "Where did I put them?"
+            ]);
+
+          }, 1500);
+          return;
+        }
+
+  return;
+        
       }
     
     advanceDialogue();
@@ -482,6 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function d1postGameDialogue() {
+  dialogueMode = "postgame";
   // do not touch the camera
   document.getElementById("osumivnCamera").style.pointerEvents = "none";
   document.getElementById("playerDialogueArrow").style.opacity = "1";
@@ -513,31 +551,6 @@ function d1postGameDialogue() {
   currentIndex = 0;
 
   advanceDialogue();
-
-  // go to navigation mode
-  fade.classList.add('out');
-  setTimeout(() => {
-
-    // show navigation view first but no buttons, aft dialogue 
-    document.getElementById("north").style.opacity = "1";
-    document.getElementById("north").style.pointerEvents = "auto";
-    document.getElementById("vnView").style.opacity = "0";
-    document.getElementById("vnView").style.pointerEvents = "none";
-
-    fade.classList.remove('out');
-  }, 2000);
-
-  setTimeout(() => {
-    finishGame1Dialogue([
-    "Alright, I need to find a Dreamstone.",
-    "Where did I put them?",
-    ]);
-
-    setTimeout(() => {
-    document.getElementById("navLeft").style.display = "block";
-    document.getElementById("navRight").style.display = "block";
-    }, 1000);
-  }, 3000);
 } 
 
 // opening and closing 3dviewer
@@ -726,8 +739,6 @@ function gameComplete() {
   setTimeout(() => {
     document.getElementById("vnCameraView").classList.remove("active");
   }, 2500),
-
-  memoryFinish = true;
   d1postGameDialogue();
 }
 
