@@ -119,18 +119,6 @@ button {
     border: none;
 }
 
-.click-pulse {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  pointer-events: none;
-  z-index: 100000;
-  animation: pulseAnim 0.5s ease-out forwards;
-}
-
 @keyframes pulseAnim {
   0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
   50%  { transform: translate(-50%, -50%) scale(1.5); opacity: 0.7; }

@@ -6,6 +6,7 @@ const enterBell_audio = new Audio("audios/enterBell.mp3");
 
 let currentDialogue = [];
 let currentIndex = 0;
+let memoryFinish = false;
 
 function advanceDialogue() {
     const dialogueText = document.getElementById("day1D");
@@ -55,7 +56,6 @@ function advanceDialogue() {
     return;
   }
 }
-
 
 /* get the back button element */
 const backBtn = document.getElementById('back');
@@ -180,7 +180,7 @@ function showChoices(options) {
       choice2.onclick = () => selectChoice(options[1]);
     }
 
-      function selectChoice(options) {
+function selectChoice(options) {
       const playerChoice = document.getElementById("playerChoice");
 
       playerChoice.style.display = "none";
@@ -189,6 +189,7 @@ function showChoices(options) {
       currentIndex = 0;
     }
 
+// trying new way to play dialogue
 function playWinDialogue(lines, continueGame) {
   const camView = document.getElementById("vnCameraView");
   const playerElement = document.getElementById("playerDialogueCV");
@@ -213,7 +214,38 @@ function playWinDialogue(lines, continueGame) {
       playerElement.style.opacity = "0";
       playerElement.style.pointerEvents = "none";
       arrow.style.opacity = "0";
-      continueGame(); // resume game flow
+      continueGame(); 
+      // resume game
+    }
+  }
+
+  camView.addEventListener("click", next);
+}
+
+function finishGame1Dialogue(lines) {
+  const camView = document.getElementById("vnCameraView");
+  const playerElement = document.getElementById("playerDialogueCV");
+  const playerText = document.getElementById("d1playerDialogueCV");
+  const arrow = document.getElementById("playerDialogueCVArrow");
+  
+  if (playerElement.style.display === "none") return;
+
+  let index = 0;
+
+  playerElement.style.opacity = "1";
+  playerElement.style.pointerEvents = "auto";
+  arrow.style.opacity = "1";
+  playerText.textContent = lines[index];
+
+  function next() {
+    if (index < lines.length) {
+      playerText.textContent = lines[index];
+      index++;
+    } else {
+      camView.removeEventListener("click", next);
+      playerElement.style.opacity = "0";
+      playerElement.style.pointerEvents = "none";
+      arrow.style.opacity = "0";
     }
   }
 
@@ -267,7 +299,6 @@ function switchPOV() {
   const dialogueText = document.getElementById("day1D");
 
   fade.style.backgroundColor = "#4d2105"; 
-  fade.style.backdropFilter = "blur(5px)";
   fade.classList.add('out');
   document.getElementById("dayCounter").textContent = "Day 1";
   setTimeout(() => {
@@ -280,21 +311,19 @@ function switchPOV() {
   document.getElementById("navLeft").style.display = "none";
   document.getElementById("navRight").style.display = "none";
 
-  
-
   fade.classList.remove('out');
 
   }, 2000);
 
-    setTimeout(() => {
-      characterImg.style.opacity = "1";
-    }, 4000);
+  setTimeout(() => {
+    characterImg.style.opacity = "1";
+  }, 4000);
 
-    setTimeout(() => {
-      dialogueWrap.style.opacity = "1";
-      dialogueText.textContent = "Oh hello! I wasn't expecting a camera repair shop of all things to open up here, in such a tucked away and hidden spot.";
+  setTimeout(() => {
+    dialogueWrap.style.opacity = "1";
+    dialogueText.textContent = "Oh hello! I wasn't expecting a camera repair shop of all things to open up here, in such a tucked away and hidden spot.";
     characterImg.src = "images/characters/osumi_1.png";
-    }, 5500);
+  }, 5500);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -451,6 +480,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 });
+
+function d1postGameDialogue() {
+  // do not touch the camera
+  document.getElementById("osumivnCamera").style.pointerEvents = "none";
+  document.getElementById("playerDialogueArrow").style.opacity = "1";
+  fade.style.backgroundColor = "#000"; 
+  document.getElementById("dayCounter").textContent = "";
+
+  const day1DialogueFinish = [
+    {
+      speaker: "npc",
+      text: "That's quick. Are you done?",
+      img: "images/characters/osumi_2.png"
+    },
+    {
+      speaker: "player",
+      text: "Yeah, pretty much."
+    },
+    {
+      speaker: "player",
+      text: "All that's left is to link your old memories to the crystal"
+    },
+    {
+      speaker: "npc",
+      text: "Oh! Okay!",
+      img: "images/characters/osumi_1.png"
+    }
+  ];
+
+  currentDialogue = day1DialogueFinish;
+  currentIndex = 0;
+
+  advanceDialogue();
+
+  // go to navigation mode
+  fade.classList.add('out');
+  setTimeout(() => {
+
+    // show navigation view first but no buttons, aft dialogue 
+    document.getElementById("north").style.opacity = "1";
+    document.getElementById("north").style.pointerEvents = "auto";
+    document.getElementById("vnView").style.opacity = "0";
+    document.getElementById("vnView").style.pointerEvents = "none";
+
+    fade.classList.remove('out');
+  }, 2000);
+
+  setTimeout(() => {
+    finishGame1Dialogue([
+    "Alright, I need to find a Dreamstone.",
+    "Where did I put them?",
+    ]);
+
+    setTimeout(() => {
+    document.getElementById("navLeft").style.display = "block";
+    document.getElementById("navRight").style.display = "block";
+    }, 1000);
+  }, 3000);
+} 
 
 // opening and closing 3dviewer
 function openViewer(which) {
@@ -610,7 +698,6 @@ function roundWin() {
   playWinDialogue([
     "That was way harder than I thought.",
     "...Do I really have to do another one?",
-    "This better be the last one... sigh..."
   ], () => {
     startRound();
   });
@@ -638,7 +725,10 @@ function gameComplete() {
 
   setTimeout(() => {
     document.getElementById("vnCameraView").classList.remove("active");
-  }, 2500)
+  }, 2500),
+
+  memoryFinish = true;
+  d1postGameDialogue();
 }
 
 // ====== LIGHTS ======
@@ -776,22 +866,7 @@ canvas.addEventListener("touchend", () => {
   old = null;
 });
 
-
-//pulse effect on click
-document.addEventListener("click", (e) => {
-  const pulse = document.createElement("div");
-  pulse.className = "click-pulse";
-  pulse.style.left = e.clientX + "px";
-  pulse.style.top = e.clientY + "px";
-  
-  lottieCursor.classList.add("pulse");
-
-  // Remove pulse after animation ends so it can retrigger
-  setTimeout(() => {
-    lottieCursor.classList.remove("pulse");
-  }, 300);
-});
-
+/*
 // init
 img.onload = resizeCanvasToPopup;
 window.addEventListener("resize", resizeCanvasToPopup);
@@ -801,3 +876,4 @@ window.addEventListener("resize", resizeCanvasToPopup);
   pulse.addEventListener("animationend", () => {
     pulse.remove();
   });
+*/
