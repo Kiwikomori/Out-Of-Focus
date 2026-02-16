@@ -7,11 +7,7 @@
     <title>IP Assignment</title>
 </head>
 
-
 <body>
-    <div id="lottieCursor">
-        <dotlottie-wc id="clickLottie" src="https://lottie.host/f07b49c1-85b1-4c59-8fee-15fa5b8ffa81/4AvOTeLj83.lottie"> </dotlottie-wc>
-    </div>
     <section id="title">
 
         <div id="scratchPopup" class="popup">
@@ -25,7 +21,7 @@
                 <div>
                     <img src="images/coverPage/title.svg" alt="title" id="titleimg" draggable="false">
                     <input type="checkbox" id="startgame">
-                    <label for="startgame" class="glow">- Click to Start -</label>
+                    <label for="startgame" class="glow" onClick="switchPOV()">- Click to Start -</label>
 
                     <div id="lesserbuttons">
                         <input type="checkbox" id="collectionbtn">
@@ -160,7 +156,7 @@
             <!-- NORTH ROOM -->
             <section id="north" class="room active">
                 <img src="images/gameAssets/rooms/north/northScene.png" alt="northScene" draggable="false">
-                <img src="images/characters/osumi_1.png" alt="osumi1" id="osumi" onClick="osumichange()" draggable="false">
+                <img src="images/characters/osumi_1.png" alt="osumi1" id="osumi" draggable="false">
                 <div id="counterShadow"></div>
                 <img src="images/gameAssets/rooms/north/northCounter.svg" alt="counter" id="northCounter" draggable="false" onClick="switchPOV()">
             </section>
@@ -253,7 +249,15 @@
                 <div id="button9" class="simonButtonStyle"></div>
                 <div id="button10" class="simonButtonStyle"></div>
             </div>
-        </div> 
+                </div>
+                <div id="playerDialogueCV">
+                    <div class="playerDialogueWrap">
+                        <div class="playerRow">
+                            <p id="d1playerDialogueCV" class="playerDialoguetxt"></p>
+                            <div id="playerDialogueCVArrow"></div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
 
@@ -268,7 +272,6 @@
 <!--
 <dotlottie-wc src="https://lottie.host/48ec130e-494f-4763-8374-fd58c19b0cb5/OkUB8yLHhU.lottie" style="width: 300px;height: 300px" autoplay loop></dotlottie-wc>
 -->
-<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 <!-- Import model-viewer -->
 </html>
