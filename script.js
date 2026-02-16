@@ -599,3 +599,122 @@ document.addEventListener("pointerdown", (e) => {
     lottieCursor.classList.remove("pulse");
   }, 300);
 });
+
+//Cloth cleaning game
+
+const url =
+  "https://cloud.githubusercontent.com/assets/4652816/12771961/5341c3c4-ca68-11e5-844c-f659831d9c00.jpg";
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = url;
+
+let isPress = false;
+let old = null;
+
+function resizeCanvasToPopup() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
+
+  // draw using CSS pixels (not raw device pixels)
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  redrawImage();
+}
+
+function redrawImage() {
+  if (!img.complete) return;
+
+  const cw = canvas.getBoundingClientRect().width;
+  const ch = canvas.getBoundingClientRect().height;
+
+  ctx.globalCompositeOperation = "source-over";
+  ctx.clearRect(0, 0, cw, ch);
+
+  // "cover" draw (fills popup without stretching)
+  const imgAR = img.width / img.height;
+  const canvasAR = cw / ch;
+
+  let drawW, drawH, dx, dy;
+  if (imgAR > canvasAR) {
+    drawH = ch;
+    drawW = ch * imgAR;
+    dx = (cw - drawW) / 2;
+    dy = 0;
+  } else {
+    drawW = cw;
+    drawH = cw / imgAR;
+    dx = 0;
+    dy = (ch - drawH) / 2;
+  }
+
+  ctx.drawImage(img, dx, dy, drawW, drawH);
+}
+
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function scratchTo(x, y) {
+  ctx.globalCompositeOperation = "destination-out";
+
+  ctx.beginPath();
+  ctx.arc(x, y, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (old) {
+    ctx.lineWidth = 24;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(old.x, old.y);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+
+  old = { x, y };
+}
+
+// mouse
+canvas.addEventListener("mousedown", (e) => {
+  isPress = true;
+  old = getPos(e);
+});
+canvas.addEventListener("mousemove", (e) => {
+  if (!isPress) return;
+  const { x, y } = getPos(e);
+  scratchTo(x, y);
+});
+window.addEventListener("mouseup", () => {
+  isPress = false;
+  old = null;
+});
+
+// touch
+canvas.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  isPress = true;
+  old = getPos(e);
+});
+canvas.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  if (!isPress) return;
+  const { x, y } = getPos(e);
+  scratchTo(x, y);
+});
+canvas.addEventListener("touchend", () => {
+  isPress = false;
+  old = null;
+});
+
+// init
+img.onload = resizeCanvasToPopup;
+window.addEventListener("resize", resizeCanvasToPopup);
