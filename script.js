@@ -661,20 +661,6 @@ function shuffle(arr) {
   return arr;
 }
 
-document.addEventListener("click", (e) => {
-  const pulse = document.createElement("div");
-  pulse.className = "click-pulse";
-  pulse.style.left = e.clientX + "px";
-  pulse.style.top = e.clientY + "px";
-  
-  lottieCursor.classList.add("pulse");
-
-  // Remove pulse after animation ends so it can retrigger
-  setTimeout(() => {
-    lottieCursor.classList.remove("pulse");
-  }, 300);
-});
-
 //Cloth cleaning game
 
 const url =
@@ -788,6 +774,22 @@ canvas.addEventListener("touchmove", (e) => {
 canvas.addEventListener("touchend", () => {
   isPress = false;
   old = null;
+});
+
+
+//pulse effect on click
+document.addEventListener("click", (e) => {
+  const pulse = document.createElement("div");
+  pulse.className = "click-pulse";
+  pulse.style.left = e.clientX + "px";
+  pulse.style.top = e.clientY + "px";
+  
+  lottieCursor.classList.add("pulse");
+
+  // Remove pulse after animation ends so it can retrigger
+  setTimeout(() => {
+    lottieCursor.classList.remove("pulse");
+  }, 300);
 });
 
 // init
