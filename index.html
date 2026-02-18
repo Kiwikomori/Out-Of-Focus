@@ -9,20 +9,10 @@
 
 <body>
     <section id="title">
-        <!--
-        <div id="scratchPopup" class="popup">
-            <div class="popupInner">
-                <img src="images/gameAssets/puzzles/lens.svg" alt="cameraLens" draggable="false" class="lensPos">
-                <div class="scratchWrap">
-                <canvas id="canvas"></canvas>
-                </div>
-            </div>
-        </div>
-        -->
                 <div>
                     <img src="images/coverPage/title.svg" alt="title" id="titleimg" draggable="false">
                     <input type="checkbox" id="startgame">
-                    <label for="startgame" class="glow" onClick="switchPOV()">- Click to Start -</label>
+                    <label for="startgame" class="glow" onClick="loadinganim()">- Click to Start -</label>
 
                     <div id="lesserbuttons">
                         <input type="checkbox" id="collectionbtn">
@@ -260,6 +250,15 @@
                     </div>
                 </div>
             </section>
+
+            <div id="playerDialogueNav">
+                    <div class="playerDialogueWrap">
+                        <div class="playerRow">
+                            <p id="d1playerDialogueNav" class="playerDialoguetxt"></p>
+                            <div id="playerDialogueNavArrow"></div>
+                        </div>
+                    </div>
+                </div>
         </div>
 
         <!-- fade out animation -->
@@ -267,12 +266,12 @@
     </main>
     <div id="small">Your browser is too small to play this game. Try resizing it!</div>
     <div id="touch">It appears you're using a touch device. Please play this game with a desktop and mouse!</div>
+
+    <audio src="audios/lobby.mp3" preload="auto"></audio>
+    <script src="script.js"></script>
+    <!-- loading animation -->
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
+    <!-- Import model-viewer -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 </body>
-<script src="script.js"></script>
-<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
-<!--
-<dotlottie-wc src="https://lottie.host/48ec130e-494f-4763-8374-fd58c19b0cb5/OkUB8yLHhU.lottie" style="width: 300px;height: 300px" autoplay loop></dotlottie-wc>
--->
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
-<!-- Import model-viewer -->
 </html>

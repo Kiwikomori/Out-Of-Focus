@@ -359,13 +359,6 @@ button {
     cursor: pointer;
 }
 
-/* if start game is checked, hide title screen */
-body:has(#startgame:checked) #title {
-    /* opacity 0 for smooth transition and pointer events none to make it unclickable */
-    opacity: 0;
-    pointer-events: none;
-}
-
 /* if startgame is checked, show game */
 body:has(#startgame:checked) #game {
     /* opacity 1 to show it and pointer events auto to make it clickable */
@@ -745,7 +738,7 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
 }
 
 /* position the whole box */
-#playerDialogue, #playerDialogueCV {
+#playerDialogue, #playerDialogueCV, #playerDialogueNav {
     position: absolute;
     bottom: 0px;
     text-align: center;
@@ -772,7 +765,7 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     gap: 5px;
 }
 
-#playerDialogueArrow, #playerDialogueCVArrow {
+#playerDialogueArrow, #playerDialogueCVArrow, #playerDialogueNavArrow {
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 8px solid #ffffffe3;

@@ -1,8 +1,14 @@
 //AUDIOS
 const chime_audio = new Audio("audios/completedChime.mp3");
+chime_audio.volume = 0.6
 const marimba_audio = new Audio("audios/completedMarimba.mp3");
+marimba_audio.volume = 0.5;
 const failHum_audio = new Audio("audios/failedHum.mp3");
+failHum_audio.volume = 0.4;
 const enterBell_audio = new Audio("audios/enterBell.mp3");
+const lobbyaudio = new Audio("audios/lobby.mp3");
+const blingaudio = new Audio("audios/bling.m4a");
+blingaudio.volume = 0.2;
 
 let currentDialogue = [];
 let currentIndex = 0;
@@ -225,10 +231,13 @@ function playWinDialogue(lines, continueGame) {
 }
 
 function finishGame1Dialogue(lines) {
-  const camView = document.getElementById("vnCameraView");
-  const playerElement = document.getElementById("playerDialogueCV");
-  const playerText = document.getElementById("d1playerDialogueCV");
-  const arrow = document.getElementById("playerDialogueCVArrow");
+  const roomView = document.getElementById("room");
+  const playerElement = document.getElementById("playerDialogueNav");
+  const playerText = document.getElementById("d1playerDialogueNav");
+  const arrow = document.getElementById("playerDialogueNavArrow");
+  const northCounter = document.getElementById("northCounter");
+
+  northCounter.style.pointerEvents = "none";
   
   if (playerElement.style.display === "none") return;
 
@@ -239,19 +248,20 @@ function finishGame1Dialogue(lines) {
   arrow.style.opacity = "1";
   playerText.textContent = lines[index];
 
-  function next() {
-    if (index < lines.length) {
-      playerText.textContent = lines[index];
-      index++;
-    } else {
-      camView.removeEventListener("click", next);
-      playerElement.style.opacity = "0";
-      playerElement.style.pointerEvents = "none";
-      arrow.style.opacity = "0";
-    }
+ function next() {
+  index++;
+  if (index < lines.length) {
+    playerText.textContent = lines[index];
+  } else {
+    roomView.removeEventListener("click", next);
+    playerElement.style.opacity = "0";
+    playerElement.style.pointerEvents = "none";
+    arrow.style.opacity = "0";
   }
+}
 
-  camView.addEventListener("click", next);
+
+  roomView.addEventListener("click", next);
 }
 
 function enterBackrooms() {
@@ -310,8 +320,10 @@ function switchPOV() {
   document.getElementById("vnView").style.opacity = "1";
   document.getElementById("vnView").style.pointerEvents = "auto";
 
-  document.getElementById("navLeft").style.display = "none";
-  document.getElementById("navRight").style.display = "none";
+  document.getElementById("navLeft").style.opacity = "0";
+  document.getElementById("navRight").style.opacity = "0";
+    document.getElementById("navLeft").style.pointerEvents = "none";
+  document.getElementById("navRight").style.pointerEvents = "none";
 
   fade.classList.remove('out');
 
@@ -329,15 +341,36 @@ function switchPOV() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const vnView = document.getElementById("vnView");
-    const dialogueText = document.getElementById("day1D");
-    const characterImg = document.getElementById("osumiVn");
-    const playerText = document.getElementById("day1PD");
-    const playerElement = document.getElementById("playerDialogue");
-    const npcArrow = document.getElementById("dialogueArrow");
-    const npcElement = document.getElementById("dialogueWrap");
+  const vnView = document.getElementById("vnView");
+  const dialogueText = document.getElementById("day1D");
+  const characterImg = document.getElementById("osumiVn");
+  const playerText = document.getElementById("day1PD");
+  const playerElement = document.getElementById("playerDialogue");
+  const npcArrow = document.getElementById("dialogueArrow");
+  const npcElement = document.getElementById("dialogueWrap");
 
-    const day1dialogue = [
+  // play lobby audio
+  lobbyaudio.volume = 0
+  // js in case it has an error
+  lobbyaudio.play().catch(() => {
+  console.log("Lobby audio play failed");
+  });
+
+  const lobbyfadeDuration = 5000;
+  const lobbyinterval = 10;
+  const lobbystep = lobbyinterval / lobbyfadeDuration;
+
+  const fadeIn = setInterval(() => {
+    if (lobbyaudio.volume < .3) {
+      lobbyaudio.volume = Math.min(lobbyaudio.volume + lobbystep, .3);
+    } else {
+      clearInterval(fadeIn);
+    }
+  }, lobbyinterval);
+
+
+
+  const day1dialogue = [
         {
           speaker: "npc",
           text: "Still, I suppose hidden places are the most interesting ones.",
@@ -454,15 +487,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
-    dialogueMode = "intro";
-    currentDialogue = day1dialogue;
-    currentIndex = 0;
+  dialogueMode = "intro";
+  currentDialogue = day1dialogue;
+  currentIndex = 0;
 
-    vnView.addEventListener("click", () => {
+  vnView.addEventListener("click", () => {
 
-      if (currentIndex >= currentDialogue.length) {
+    if (currentIndex >= currentDialogue.length) {
 
-        if (dialogueMode === "intro") {
+      if (dialogueMode === "intro") {
         npcArrow.style.display = "none";
         npcElement.style.display = "none";
 
@@ -495,8 +528,10 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("north").style.opacity = "1";
             document.getElementById("north").style.pointerEvents = "auto";
 
-            document.getElementById("navLeft").style.display = "block";
-            document.getElementById("navRight").style.display = "block";
+            document.getElementById("navLeft").style.pointerEvents = "auto";
+            document.getElementById("navRight").style.pointerEvents = "auto";
+            document.getElementById("navLeft").style.opacity = "1";
+            document.getElementById("navRight").style.opacity = "1";
 
             fade.classList.remove('out');
 
@@ -538,7 +573,7 @@ function d1postGameDialogue() {
     },
     {
       speaker: "player",
-      text: "All that's left is to link your old memories to the crystal"
+      text: "All that's left is to link your old memories to the crystal."
     },
     {
       speaker: "npc",
@@ -552,6 +587,58 @@ function d1postGameDialogue() {
 
   advanceDialogue();
 } 
+
+// loading animation
+function loadinganim() {
+  blingaudio.play();
+  const loadingoverlay = document.createElement("div");
+  const startGame = document.getElementById("title");
+  loadingoverlay.style.position = "fixed";
+  loadingoverlay.style.top = "0";
+  loadingoverlay.style.left = "0";
+  loadingoverlay.style.width = "100%";
+  loadingoverlay.style.height = "100%";
+  loadingoverlay.style.background = "rgba(0, 0, 0, 0.6)";
+  loadingoverlay.style.backdropFilter = "blur(8px)";
+  loadingoverlay.style.webkitBackdropFilter = "blur(8px)";
+  loadingoverlay.style.display = "flex";
+  loadingoverlay.style.alignItems = "center";
+  loadingoverlay.style.justifyContent = "center";
+  loadingoverlay.style.zIndex = "9999";
+  loadingoverlay.style.opacity = "0";
+  loadingoverlay.style.transition = "opacity 0.3s ease";
+
+  // <dotlottie-wc src="https://lottie.host/96fe7485-54e7-4418-b3f9-a923b6dc250c/Fc9DnhaCtC.lottie" style="width: 300px;height: 300px" autoplay loop></dotlottie-wc>
+  // lottie animation here
+
+  const lottie = document.createElement("dotlottie-wc");
+  lottie.setAttribute(
+    "src", "https://lottie.host/96fe7485-54e7-4418-b3f9-a923b6dc250c/Fc9DnhaCtC.lottie"
+  );
+  lottie.style.width = "600px";
+  lottie.style.height = "600px";
+  lottie.setAttribute("autoplay", "");
+  lottie.setAttribute("loop", "");
+
+  loadingoverlay.appendChild(lottie);
+  document.body.appendChild(loadingoverlay);
+
+  requestAnimationFrame(() => {
+    loadingoverlay.style.opacity = "1";
+  });
+
+  setTimeout(() => {
+    loadingoverlay.style.opacity = "0";
+    setTimeout(() => {
+      loadingoverlay.remove();
+    }, 300);
+    startGame.style.opacity = "0";
+    startGame.style.pointerEvents = "none";
+    switchPOV();
+
+  }, 3100);
+
+}
 
 // opening and closing 3dviewer
 function openViewer(which) {
@@ -588,7 +675,6 @@ function openViewer(which) {
 
   document.getElementById("exitViewerButton")?.addEventListener("click", closeViewer);
 
-// ==============PUZZLES==============
 // Simon memory game
 
 // ====== CONFIG ====== 
@@ -761,130 +847,3 @@ function shuffle(arr) {
   }
   return arr;
 }
-
-//Cloth cleaning game
-
-const url =
-  "https://cloud.githubusercontent.com/assets/4652816/12771961/5341c3c4-ca68-11e5-844c-f659831d9c00.jpg";
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-const img = new Image();
-img.crossOrigin = "anonymous";
-img.src = url;
-
-let isPress = false;
-let old = null;
-
-function resizeCanvasToPopup() {
-  const rect = canvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-
-  canvas.width = Math.floor(rect.width * dpr);
-  canvas.height = Math.floor(rect.height * dpr);
-
-  // draw using CSS pixels (not raw device pixels)
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  redrawImage();
-}
-
-function redrawImage() {
-  if (!img.complete) return;
-
-  const cw = canvas.getBoundingClientRect().width;
-  const ch = canvas.getBoundingClientRect().height;
-
-  ctx.globalCompositeOperation = "source-over";
-  ctx.clearRect(0, 0, cw, ch);
-
-  // "cover" draw (fills popup without stretching)
-  const imgAR = img.width / img.height;
-  const canvasAR = cw / ch;
-
-  let drawW, drawH, dx, dy;
-  if (imgAR > canvasAR) {
-    drawH = ch;
-    drawW = ch * imgAR;
-    dx = (cw - drawW) / 2;
-    dy = 0;
-  } else {
-    drawW = cw;
-    drawH = cw / imgAR;
-    dx = 0;
-    dy = (ch - drawH) / 2;
-  }
-
-  ctx.drawImage(img, dx, dy, drawW, drawH);
-}
-
-function getPos(e) {
-  const rect = canvas.getBoundingClientRect();
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-  return { x: clientX - rect.left, y: clientY - rect.top };
-}
-
-function scratchTo(x, y) {
-  ctx.globalCompositeOperation = "destination-out";
-
-  ctx.beginPath();
-  ctx.arc(x, y, 12, 0, Math.PI * 2);
-  ctx.fill();
-
-  if (old) {
-    ctx.lineWidth = 24;
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.moveTo(old.x, old.y);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  }
-
-  old = { x, y };
-}
-
-// mouse
-canvas.addEventListener("mousedown", (e) => {
-  isPress = true;
-  old = getPos(e);
-});
-canvas.addEventListener("mousemove", (e) => {
-  if (!isPress) return;
-  const { x, y } = getPos(e);
-  scratchTo(x, y);
-});
-window.addEventListener("mouseup", () => {
-  isPress = false;
-  old = null;
-});
-
-// touch
-canvas.addEventListener("touchstart", (e) => {
-  e.preventDefault();
-  isPress = true;
-  old = getPos(e);
-});
-canvas.addEventListener("touchmove", (e) => {
-  e.preventDefault();
-  if (!isPress) return;
-  const { x, y } = getPos(e);
-  scratchTo(x, y);
-});
-canvas.addEventListener("touchend", () => {
-  isPress = false;
-  old = null;
-});
-
-/*
-// init
-img.onload = resizeCanvasToPopup;
-window.addEventListener("resize", resizeCanvasToPopup);
-  document.body.appendChild(pulse);
-  
-  // Remove the element after animation ends
-  pulse.addEventListener("animationend", () => {
-    pulse.remove();
-  });
-*/
