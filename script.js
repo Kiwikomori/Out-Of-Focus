@@ -15,6 +15,25 @@ let currentIndex = 0;
 let dialogueMode = "intro"; 
 // "intro", "postgame", "findcrystal"
 
+  // play lobby audio
+  lobbyaudio.volume = 0
+  // js in case it has an error
+  lobbyaudio.play().catch(() => {
+  console.log("Lobby audio play failed");
+  });
+
+  const lobbyfadeDuration = 5000;
+  const lobbyinterval = 10;
+  const lobbystep = lobbyinterval / lobbyfadeDuration;
+
+  const fadeIn = setInterval(() => {
+    if (lobbyaudio.volume < .3) {
+      lobbyaudio.volume = Math.min(lobbyaudio.volume + lobbystep, .3);
+    } else {
+      clearInterval(fadeIn);
+    }
+  }, lobbyinterval);
+
 function advanceDialogue() {
     const dialogueText = document.getElementById("day1D");
     const characterImg = document.getElementById("osumiVn");
@@ -349,27 +368,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const npcArrow = document.getElementById("dialogueArrow");
   const npcElement = document.getElementById("dialogueWrap");
 
-  // play lobby audio
-  lobbyaudio.volume = 0
-  // js in case it has an error
-  lobbyaudio.play().catch(() => {
-  console.log("Lobby audio play failed");
-  });
-
-  const lobbyfadeDuration = 5000;
-  const lobbyinterval = 10;
-  const lobbystep = lobbyinterval / lobbyfadeDuration;
-
-  const fadeIn = setInterval(() => {
-    if (lobbyaudio.volume < .3) {
-      lobbyaudio.volume = Math.min(lobbyaudio.volume + lobbystep, .3);
-    } else {
-      clearInterval(fadeIn);
-    }
-  }, lobbyinterval);
-
-
-
   const day1dialogue = [
         {
           speaker: "npc",
@@ -545,11 +543,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
   return;
-        
       }
     
     advanceDialogue();
-
     });
 });
 
@@ -632,12 +628,11 @@ function loadinganim() {
     setTimeout(() => {
       loadingoverlay.remove();
     }, 300);
+
     startGame.style.opacity = "0";
     startGame.style.pointerEvents = "none";
     switchPOV();
-
   }, 3100);
-
 }
 
 // opening and closing 3dviewer
