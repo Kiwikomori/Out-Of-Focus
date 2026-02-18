@@ -138,7 +138,7 @@
     <main id="game">
         <nav id="navi">
             <!-- navigation here -->
-            <button type="button" onClick="go('left')" id="navLeft"><img src="images/gameAssets/leftArrow.svg"draggable="false"></button>
+            <button type="button" onClick="go('left')" id="navLeft"><img src="images/gameAssets/leftArrow.svg" draggable="false"></button>
             <button type="button" onClick="go('right')" id="navRight"><img src="images/gameAssets/rightArrow.svg" draggable="false"></button>
             <button type="button" onClick="exitBackrooms()" id="navBack"><img src="images/gameAssets/downArrow.svg" draggable="false"></button>
         </nav>
@@ -149,7 +149,7 @@
                 <img src="images/gameAssets/rooms/north/northScene.png" alt="northScene" draggable="false">
                 <img src="images/characters/osumi_1.png" alt="osumi1" id="osumi" draggable="false">
                 <div id="counterShadow"></div>
-                <img src="images/gameAssets/rooms/north/northCounter.svg" alt="counter" id="northCounter" draggable="false" onClick="switchPOV()">
+                <img src="images/gameAssets/rooms/north/northCounter.svg" alt="counter" id="northCounter" draggable="false" onClick="afterDreamstonePOV()">
             </section>
 
             <!-- EAST ROOM -->
@@ -170,7 +170,7 @@
                 </button>
                 <div id="drawer-zoomedin" popover>
                     <img src="images/gameAssets/rooms/south/openDrawer.svg" draggable="false" class="zoomedimg">
-                    <button popovertarget="drawer-zoomedin" popovertargetaction="hide"><img src="images/gameAssets/downArrow.svg" alt=""></button>
+                    <button popovertarget="drawer-zoomedin" popovertargetaction="hide"><img src="images/gameAssets/downArrow.svg" alt="" draggable="false"></button>
                 </div>
             </section>
 
@@ -182,7 +182,8 @@
                 </button>
                 <div id="westCrate-zoomedin" popover>
                     <img src="images/gameAssets/rooms/west/openCrate.svg" draggable="false" class="zoomedimg">
-                    <button popovertarget="westCrate-zoomedin" popovertargetaction="hide"><img src="images/gameAssets/downArrow.svg" alt=""></button>
+                    <img src="images/gameAssets/rooms/west/dreamstone.svg" draggable="false" id="dreamstone" onClick="dreamstoneGet()">
+                    <button popovertarget="westCrate-zoomedin" popovertargetaction="hide"><img src="images/gameAssets/downArrow.svg" draggable="false" id="closeChest"></button>
                 </div>
             </section>
 
@@ -259,6 +260,10 @@
                         </div>
                     </div>
                 </div>
+
+            <div id="finishScreen">
+                <div id="finishTimeText"></div>
+            </div>
         </div>
 
         <!-- fade out animation -->
@@ -267,7 +272,8 @@
     <div id="small">Your browser is too small to play this game. Try resizing it!</div>
     <div id="touch">It appears you're using a touch device. Please play this game with a desktop and mouse!</div>
 
-    <audio src="audios/lobby.mp3" preload="auto"></audio>
+    <audio src="audios/game.m4a" preload="auto" loop id="gamemusic"></audio>
+
     <script src="script.js"></script>
     <!-- loading animation -->
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>

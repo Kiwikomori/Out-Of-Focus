@@ -1,38 +1,27 @@
 //AUDIOS
-const chime_audio = new Audio("audios/completedChime.mp3");
-chime_audio.volume = 0.6
+const chime_audio = new Audio("audios/completedChime.m4a");
+chime_audio.volume = 0.4;
 const marimba_audio = new Audio("audios/completedMarimba.mp3");
 marimba_audio.volume = 0.5;
 const failHum_audio = new Audio("audios/failedHum.mp3");
-failHum_audio.volume = 0.4;
+failHum_audio.volume = 0.3;
 const enterBell_audio = new Audio("audios/enterBell.mp3");
-const lobbyaudio = new Audio("audios/lobby.mp3");
+enterBell_audio.volume = 0.3;
 const blingaudio = new Audio("audios/bling.m4a");
 blingaudio.volume = 0.2;
+const gameaudio = document.getElementById("gamemusic");
 
 let currentDialogue = [];
 let currentIndex = 0;
 let dialogueMode = "intro"; 
 // "intro", "postgame", "findcrystal"
+let finishGame = false;
+let isFinalDay1 = false;
 
-  // play lobby audio
-  lobbyaudio.volume = 0
-  // js in case it has an error
-  lobbyaudio.play().catch(() => {
-  console.log("Lobby audio play failed");
-  });
+// timer
+let timerStart = 0;
+let timerInterval = null;
 
-  const lobbyfadeDuration = 5000;
-  const lobbyinterval = 10;
-  const lobbystep = lobbyinterval / lobbyfadeDuration;
-
-  const fadeIn = setInterval(() => {
-    if (lobbyaudio.volume < .3) {
-      lobbyaudio.volume = Math.min(lobbyaudio.volume + lobbystep, .3);
-    } else {
-      clearInterval(fadeIn);
-    }
-  }, lobbyinterval);
 
 function advanceDialogue() {
     const dialogueText = document.getElementById("day1D");
@@ -42,19 +31,55 @@ function advanceDialogue() {
     const npcArrow = document.getElementById("dialogueArrow");
     const npcElement = document.getElementById("dialogueWrap");
 
-  if (currentIndex >= currentDialogue.length) return;
+  if (currentIndex >= currentDialogue.length) {
+
+    if (isFinalDay1) {
+      finishGame = true;
+      showFinishScreen();
+      isFinalDay1 = false;
+    }
+
+    return;
+  }
 
   const current = currentDialogue[currentIndex];
   const playerChoice = document.getElementById("playerChoice");
 
   if (playerChoice.style.display === "block") return;
 
+  // actions
   if (current.action === "placeCamera") {
     setTimeout(() => {
       document.getElementById("osumivnCamera").style.opacity = "1";
     }, 200);
   }
+  else if (current.action === "transferDreamstone") {
+    const fade = document.getElementById('fade');
 
+    // fade out
+    fade.classList.add('out');
+
+    setTimeout(() => {
+      // fade in
+      fade.classList.remove('out');
+      currentIndex++;
+    }, 1200)
+  }
+  else if (current.action === "exitShop") {
+    setTimeout(() => {
+      document.getElementById("dialogueWrap").style.opacity = "0";
+      document.getElementById("dialogueWrap").style.pointerEvents = "none";
+
+      setTimeout(() => {
+        characterImg.style.opacity = "0";
+      }, 500)
+      setTimeout(() => {
+        enterBell_audio.play();
+      }, 800)
+    },300)
+  }
+
+  // speakers
   if (current.speaker === "npc") {
     playerElement.style.opacity = "0";
     npcArrow.style.display = "block";
@@ -65,7 +90,7 @@ function advanceDialogue() {
     currentIndex++;
   }
 
-  else if (current.speaker === "player") {
+  if (current.speaker === "player") {
     playerElement.style.opacity = "1";
     playerElement.style.pointerEvents = "auto";
     npcArrow.style.display = "none";
@@ -74,7 +99,7 @@ function advanceDialogue() {
     currentIndex++;
   }
 
-  else if (current.speaker === "choice") {
+  if (current.speaker === "choice") {
     npcArrow.style.display = "none";
     playerElement.style.opacity = "0";
     npcElement.style.display = "none";
@@ -99,6 +124,7 @@ let currentRoom = '0';
 let insideBR = false;
 // false by default
 
+// where to go when clicking  buttons
 function go(where) {
   const fade = document.getElementById('fade');
 
@@ -126,6 +152,7 @@ function go(where) {
   }, 450); // duration of fade out
 }
 
+// check if im in backrooms
 function visibilityCheck() {
   // get the buttons
   const left = document.getElementById('navLeft');
@@ -245,7 +272,6 @@ function playWinDialogue(lines, continueGame) {
       // resume game
     }
   }
-
   camView.addEventListener("click", next);
 }
 
@@ -276,9 +302,15 @@ function finishGame1Dialogue(lines) {
     playerElement.style.opacity = "0";
     playerElement.style.pointerEvents = "none";
     arrow.style.opacity = "0";
+
+    setTimeout(() => {
+              document.getElementById("navLeft").style.pointerEvents = "auto";
+              document.getElementById("navRight").style.pointerEvents = "auto";
+              document.getElementById("navLeft").style.opacity = "1";
+              document.getElementById("navRight").style.opacity = "1";
+            }, 700)
   }
 }
-
 
   roomView.addEventListener("click", next);
 }
@@ -339,27 +371,50 @@ function switchPOV() {
   document.getElementById("vnView").style.opacity = "1";
   document.getElementById("vnView").style.pointerEvents = "auto";
 
-  document.getElementById("navLeft").style.opacity = "0";
-  document.getElementById("navRight").style.opacity = "0";
-    document.getElementById("navLeft").style.pointerEvents = "none";
-  document.getElementById("navRight").style.pointerEvents = "none";
-
   fade.classList.remove('out');
 
   }, 2000);
 
   setTimeout(() => {
+    enterBell_audio.play();
+  }, 6000)
+
+  setTimeout(() => {
     characterImg.style.opacity = "1";
-  }, 4000);
+  }, 8000);
 
   setTimeout(() => {
     dialogueWrap.style.opacity = "1";
     dialogueText.textContent = "Oh hello! I wasn't expecting a camera repair shop of all things to open up here, in such a tucked away and hidden spot.";
     characterImg.src = "images/characters/osumi_1.png";
-  }, 5500);
+  }, 9500);
+}
+
+function gameaudiofade() {
+  gameaudio.volume = 0
+  // js in case it has an error
+  gameaudio.play().catch(() => {
+  console.log("game audio play failed");
+  });
+
+  const gamefadeDuration = 5000;
+  const gameinterval = 0.05;
+  const gamestep = gameinterval / gamefadeDuration;
+
+  const audiofadein = setInterval(() => {
+    if (gameaudio.volume < .1) {
+      gameaudio.volume = Math.min(gameaudio.volume + gamestep, .1);
+    } else {
+      clearInterval(audiofadein);
+    }
+  }, gameinterval);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("navLeft").style.opacity = "0";
+  document.getElementById("navRight").style.opacity = "0";
+  document.getElementById("navLeft").style.pointerEvents = "none";
+  document.getElementById("navRight").style.pointerEvents = "none";
   const vnView = document.getElementById("vnView");
   const dialogueText = document.getElementById("day1D");
   const characterImg = document.getElementById("osumiVn");
@@ -490,7 +545,6 @@ document.addEventListener("DOMContentLoaded", () => {
   currentIndex = 0;
 
   vnView.addEventListener("click", () => {
-
     if (currentIndex >= currentDialogue.length) {
 
       if (dialogueMode === "intro") {
@@ -512,7 +566,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         else if (dialogueMode === "postgame") {
-          //  TODO: make the dialogue show.
           dialogueMode = "findcrystal";
 
           fade.classList.add('out');
@@ -526,22 +579,16 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("north").style.opacity = "1";
             document.getElementById("north").style.pointerEvents = "auto";
 
-            document.getElementById("navLeft").style.pointerEvents = "auto";
-            document.getElementById("navRight").style.pointerEvents = "auto";
-            document.getElementById("navLeft").style.opacity = "1";
-            document.getElementById("navRight").style.opacity = "1";
-
             fade.classList.remove('out');
 
             finishGame1Dialogue([
               "Alright, I need to find a Dreamstone.",
-              "Where did I put them?"
+              "Where did I put them?",
+              "I think I had some in a chest somewhere."
             ]);
-
           }, 1500);
           return;
         }
-
   return;
       }
     
@@ -565,15 +612,15 @@ function d1postGameDialogue() {
     },
     {
       speaker: "player",
-      text: "Yeah, pretty much."
+      text: "Almost."
     },
     {
       speaker: "player",
-      text: "All that's left is to link your old memories to the crystal."
+      text: "All that's left is to transfer your old memories to the Dreamstone."
     },
     {
       speaker: "npc",
-      text: "Oh! Okay!",
+      text: "Oh, okay~!",
       img: "images/characters/osumi_1.png"
     }
   ];
@@ -604,9 +651,7 @@ function loadinganim() {
   loadingoverlay.style.opacity = "0";
   loadingoverlay.style.transition = "opacity 0.3s ease";
 
-  // <dotlottie-wc src="https://lottie.host/96fe7485-54e7-4418-b3f9-a923b6dc250c/Fc9DnhaCtC.lottie" style="width: 300px;height: 300px" autoplay loop></dotlottie-wc>
   // lottie animation here
-
   const lottie = document.createElement("dotlottie-wc");
   lottie.setAttribute(
     "src", "https://lottie.host/96fe7485-54e7-4418-b3f9-a923b6dc250c/Fc9DnhaCtC.lottie"
@@ -628,10 +673,11 @@ function loadinganim() {
     setTimeout(() => {
       loadingoverlay.remove();
     }, 300);
-
+    
     startGame.style.opacity = "0";
     startGame.style.pointerEvents = "none";
     switchPOV();
+    gameaudiofade();
   }, 3100);
 }
 
@@ -702,6 +748,9 @@ buttons.forEach((btn) => {
 
 // ====== GAME FLOW ======
 function startRound() {
+  if (timerStart === 0) {
+    timerStart = performance.now();
+  }
   expected = 1;
   acceptingClicks = false;
 
@@ -798,7 +847,6 @@ function roundWin() {
 } else {
   setTimeout(() => startRound(), 1500);
 }
-
 }
 
 function roundFail() {
@@ -812,6 +860,11 @@ function roundFail() {
 }
 
 function gameComplete() {
+  const totalTime = (performance.now() - timerStart) / 1000;
+  console.log("Time taken:", totalTime.toFixed(2) + "s");
+
+  timerStart = 0;
+
   // reveal all
   buttons.forEach((b) => b.classList.remove("hidden"));
   buttons.forEach((b) => (b.style.pointerEvents = "none"));
@@ -841,4 +894,301 @@ function shuffle(arr) {
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
+}
+
+// dialogue for dreamstone
+function foundDreamstoneDialogue(lines) {
+  const roomView = document.getElementById("room");
+  const playerElement = document.getElementById("playerDialogueNav");
+  const playerText = document.getElementById("d1playerDialogueNav");
+  const arrow = document.getElementById("playerDialogueNavArrow");
+  const northCounter = document.getElementById("northCounter");
+
+  document.getElementById("navLeft").style.pointerEvents = "none";
+  document.getElementById("navRight").style.pointerEvents = "none";
+  document.getElementById("navLeft").style.opacity = "0";
+  document.getElementById("navRight").style.opacity = "0";
+
+  northCounter.style.pointerEvents = "auto";
+  
+  if (playerElement.style.display === "none") return;
+
+  let index = 0;
+
+  playerElement.style.opacity = "1";
+  playerElement.style.pointerEvents = "auto";
+  arrow.style.opacity = "1";
+  playerText.textContent = lines[index];
+
+ function next() {
+  index++;
+  if (index < lines.length) {
+    playerText.textContent = lines[index];
+  } else {
+    roomView.removeEventListener("click", next);
+    playerElement.style.opacity = "0";
+    playerElement.style.pointerEvents = "none";
+    arrow.style.opacity = "0";
+
+    setTimeout(() => {
+              document.getElementById("navLeft").style.pointerEvents = "auto";
+              document.getElementById("navRight").style.pointerEvents = "auto";
+              document.getElementById("navLeft").style.opacity = "1";
+              document.getElementById("navRight").style.opacity = "1";
+            }, 700)
+  }
+}
+
+  roomView.addEventListener("click", next);
+}
+
+// if dreamstone selected
+const dreamstone = document.getElementById("dreamstone");
+
+function dreamstoneGet() {
+    dreamstone.style.opacity = "0";
+    dreamstone.style.pointerEvents = "none";
+
+    const closeChest = document.getElementById("closeChest");
+    closeChest.addEventListener('click', function(){
+      foundDreamstoneDialogue([
+        "I only have one left?",
+        "I only have one left?",
+        "I guess I'll have to get more soon.",
+        "Whatever, let's return to the camera."
+      ]);
+    });
+  }
+
+function afterDreamstonePOV() {
+  fade.classList.add('out');
+  setTimeout(() => {
+  document.getElementById("north").style.opacity = "0";
+  document.getElementById("north").style.pointerEvents = "none";
+  document.getElementById("vnView").style.opacity = "1";
+  document.getElementById("vnView").style.pointerEvents = "auto";
+  document.getElementById("navLeft").style.pointerEvents = "none";
+  document.getElementById("navRight").style.pointerEvents = "none";
+  document.getElementById("navLeft").style.opacity = "0";
+  document.getElementById("navRight").style.opacity = "0";
+
+  const characterImg = document.getElementById("osumiVn");
+  const dialogueWrap = document.getElementById("dialogueWrap");
+  const dialogueText = document.getElementById("day1D");
+
+  dialogueWrap.style.opacity = "0";
+  characterImg.src = "images/characters/osumi_2.png";
+  fade.classList.remove('out');
+
+  setTimeout(() => {
+    dialogueWrap.style.opacity = "1";
+    dialogueText.textContent = "Is that the Dreamstone?";
+    finalDay1Dialogue();
+  }, 2000)
+  }, 1000);
+}
+
+function finalDay1Dialogue() {
+  document.getElementById("osumivnCamera").style.pointerEvents = "none";
+  document.getElementById("playerDialogueArrow").style.opacity = "1";
+
+  isFinalDay1 = true;
+  const endOfDayDialogue = [
+    {
+      speaker: "npc",
+      text: "Is that the Dreamstone?",
+      img: "images/characters/osumi_2.png"
+    },
+    {
+      speaker: "npc",
+      text: "It looks really pretty~",
+      img: "images/characters/osumi_1.png"
+    },
+    {
+      speaker: "player",
+      text: "Yeah. To connect it to the camera you have to—"
+    },
+    {
+      speaker: "npc",
+      text: "It's okay!",
+      img: "images/characters/osumi_1.png"
+    },
+    {
+      speaker: "npc",
+      text: "I got it.",
+      img: "images/characters/osumi_2.png"
+    },
+    {
+      speaker: "player",
+      text: "No, but—",
+    },
+    {
+      speaker: "npc",
+      text: "Really! Please, I'm just in a hurry.",
+      img: "images/characters/osumi_2.png"
+    },
+    {
+      speaker: "player",
+      text: "..."
+    },
+    {
+      speaker: "choice",
+          options: [
+            {
+              // choice 1
+              text: "[Press further]",
+              nextDialogue: [
+                {
+                  speaker: "player",
+                  text: "Why are you so rushed all of a sudden?"
+                },
+                { 
+                  speaker: "npc", 
+                  text: "Hehe, what do you mean?",
+                  img: "images/characters/osumi_2.png" 
+                },
+                { 
+                  speaker: "npc", 
+                  text: "I just have somewhere to be...",
+                  img: "images/characters/osumi_1.png" 
+                },
+                { 
+                  speaker: "npc", 
+                  text: "Why are you looking at me like that?",
+                  img: "images/characters/osumi_2.png" 
+                },
+                { 
+                  speaker: "npc", 
+                  text: "...",
+                  img: "images/characters/osumi_4.png" 
+                },
+                {
+                  speaker: "npc",
+                  text: "... It's not my camera. I borrowed it off of my friend.",
+                  img: "images/characters/osumi_5.png" 
+                },
+                {
+                  speaker: "npc",
+                  text: "There were personal memories in it, and I tried to take it out, but I'm not good with these things.",
+                  img: "images/characters/osumi_5.png" 
+                },
+                {
+                  speaker: "npc",
+                  text: "So I must've damage it pretty badly by accident... It wouldnt turn back on and I was worried.",
+                  img: "images/characters/osumi_5.png" 
+                },
+                {
+                  speaker: "npc",
+                  text: "Anyways, I'm really really in a hurry. I have to go!",
+                  img: "images/characters/osumi_2.png"
+                },
+                {
+                  speaker: "player",
+                  text: "Wait!"
+                },
+                {
+                  speaker: "npc",
+                  text: "Alright! Bye now!",
+                  img: "images/characters/osumi_1.png",
+                },
+                {
+                  speaker: "player",
+                  text: "...",
+                  action: "exitShop"
+                },
+                {
+                  speaker: "player",
+                  text: "... She still left her camera here."
+                },
+                {
+                  speaker: "player",
+                  text: "Guess I'll hold onto it for the time being."
+                }
+              ]
+            },
+            {
+              // choice 2
+              text: "[Ignore it]",
+              nextDialogue: [
+                {
+                  speaker: "player",
+                  text: "... Alright, fine."
+                },
+                {
+                  speaker: "npc",
+                  text: "Thanks.",
+                  img: "images/characters/osumi_2.png"
+                },
+                { 
+                  speaker: "player",
+                  text: "It'll take just a minute to transfer the memories.", 
+                },
+                {
+                  speaker: "npc",
+                  text: "What are you going to do—",
+                  img: "images/characters/osumi_3.png",
+                  action: "transferDreamstone"
+                },
+                {
+                  speaker: "player",
+                  text: "It's done.", 
+                },
+                {
+                  speaker: "npc",
+                  text: "What was that?!",
+                  img: "images/characters/osumi_3.png",
+                },
+                {
+                  speaker: "npc",
+                  text: "Oh! The time... I really need to get going.",
+                  img: "images/characters/osumi_6.png",
+                },
+                {
+                  speaker: "npc",
+                  text: "Thanks so much for the Dreamstone though! Bye bye!!",
+                  img: "images/characters/osumi_2.png",
+                },
+                {
+                  speaker: "player",
+                  text: "Wait! Don't forget—",
+                  action: "exitShop"
+
+                },
+                {
+                  speaker: "player",
+                  text: "... Your camera...",
+                },
+                {
+                  speaker: "player",
+                  text: "Guess I'll hold onto it for the time being."
+                }
+              ]
+            }
+          ]
+    }
+  ];
+
+  currentDialogue = endOfDayDialogue;
+  currentIndex = 0;
+
+  advanceDialogue();
+} 
+
+function showFinishScreen() {
+
+  const finishScreen = document.getElementById("finishScreen");
+  const finishText = document.getElementById("finishTimeText");
+
+  finishScreen.style.opacity = "1";
+  finishScreen.style.pointerEvents = "auto";
+
+  const totalTime = (performance.now() - timerStart);
+
+  const minutes = Math.floor(totalTime / 60000);
+  const seconds = Math.floor((totalTime % 60000) / 1000);
+  const milliseconds = Math.floor(totalTime % 1000);
+  const formatno = milliseconds.toString().padStart(3, "0");
+
+finishText.textContent =
+  `${minutes} min ${seconds} sec ${formatno} ms`;
 }
