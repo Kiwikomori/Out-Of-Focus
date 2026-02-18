@@ -144,7 +144,7 @@ button {
 }
 
 .backStyle {
-    font-size: 24px;
+    font-size: 15px;
     color: #ffffff;
     font-weight: 400;
 }
@@ -173,6 +173,36 @@ button {
             right: 1280px;;
         }
     }
+
+    #finishScreen {
+        background-color: rgba(0, 0, 0, 0.767);
+        backdrop-filter: blur(5px);
+        position: fixed;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease-in-out;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+    }
+    
+    .finishtextwrap {
+        gap: 1px;
+        text-align: center;
+    }
+
+    .bigtext {
+        font-size: 50px;
+        color: #ffd890;
+    }
+
+    .smalltext, #finishTimeText {
+        font-size: 20px;
+        color: #ecdcbed0;
+        font-family: "Philosopher", sans-serif;
+    }
+
 /* =============== NAVIGATION =============== */
 .room {
     position: absolute;
@@ -192,7 +222,7 @@ button {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease-in-out;
-    z-index: 9999;
+    z-index: 9998;
     display: grid;
     place-items: center;
 }
@@ -525,7 +555,6 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
     padding-bottom: 40px;
     font-size: 12px;
     font-family: "Philosopher", sans-serif;
-
 }
 
 .lockedText {
@@ -741,7 +770,6 @@ body:has(#archivesbtn:checked) #title, body:has(#collectionbtn:checked) #title {
         bottom: 8px;
     }
 }
-
 
 #dayCounter {
     font-size: 100px;

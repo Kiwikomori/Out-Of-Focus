@@ -260,14 +260,22 @@
                         </div>
                     </div>
                 </div>
-
-            <div id="finishScreen">
-                <div id="finishTimeText"></div>
-            </div>
         </div>
 
         <!-- fade out animation -->
         <div id="fade"><p id="dayCounter"></p></div>
+
+        <div id="finishScreen">
+            <div class="finishtextwrap">
+                <p class="bigtext">Day 1 Complete</p>
+                <p class="smalltext">Thank you for playing!</p>
+
+                <input type="checkbox" id="back">
+                <label for="back" class="backStyle">Return to Title</label>
+            </div>
+            
+            <p id="finishTimeText"></p>
+        </div>
     </main>
     <div id="small">Your browser is too small to play this game. Try resizing it!</div>
     <div id="touch">It appears you're using a touch device. Please play this game with a desktop and mouse!</div>

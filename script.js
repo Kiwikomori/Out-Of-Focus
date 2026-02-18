@@ -22,6 +22,24 @@ let isFinalDay1 = false;
 let timerStart = 0;
 let timerInterval = null;
 
+function showFinishScreen() {
+
+  const finishScreen = document.getElementById("finishScreen");
+  const finishText = document.getElementById("finishTimeText");
+
+  finishScreen.style.opacity = "1";
+  finishScreen.style.pointerEvents = "auto";
+
+  const totalTime = (performance.now() - timerStart);
+
+  const minutes = Math.floor(totalTime / 60000);
+  const seconds = Math.floor((totalTime % 60000) / 1000);
+  const milliseconds = Math.floor(totalTime % 1000);
+  const formatno = milliseconds.toString().padStart(2, "0");
+
+finishText.textContent =
+  `Time taken for puzzle:\n${minutes} min ${seconds} sec ${formatno} ms`;
+}
 
 function advanceDialogue() {
     const dialogueText = document.getElementById("day1D");
@@ -32,13 +50,11 @@ function advanceDialogue() {
     const npcElement = document.getElementById("dialogueWrap");
 
   if (currentIndex >= currentDialogue.length) {
-
     if (isFinalDay1) {
       finishGame = true;
       showFinishScreen();
       isFinalDay1 = false;
     }
-
     return;
   }
 
@@ -53,6 +69,7 @@ function advanceDialogue() {
       document.getElementById("osumivnCamera").style.opacity = "1";
     }, 200);
   }
+
   else if (current.action === "transferDreamstone") {
     const fade = document.getElementById('fade');
 
@@ -65,6 +82,7 @@ function advanceDialogue() {
       currentIndex++;
     }, 1200)
   }
+
   else if (current.action === "exitShop") {
     setTimeout(() => {
       document.getElementById("dialogueWrap").style.opacity = "0";
@@ -112,11 +130,26 @@ function advanceDialogue() {
 const backBtn = document.getElementById('back');
 
 /* uncheck all checkboxes when Back button is clicked */
-  backBtn.addEventListener('click', function uncheck() {
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-      cb.checked = false;
-    });
+backBtn.addEventListener('click', function uncheck() {
+  // reset any toggles (start game, archives, etc.)
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.checked = false;
   });
+
+  // if the title screen was hidden by inline styles, restore it
+  const title = document.getElementById('title');
+  if (title) {
+    title.style.opacity = '1';
+    title.style.pointerEvents = 'auto';
+  }
+
+  // hide the finish screen explicitly
+  const finish = document.getElementById('finishScreen');
+  if (finish) {
+    finish.style.opacity = '0';
+    finish.style.pointerEvents = 'none';
+  }
+});
 
 /* navigation between rooms */
 const rooms = ['north', 'east', 'southFront', 'west'];
@@ -133,7 +166,6 @@ function go(where) {
 
   setTimeout(() => {
 
-    // hide current room and show new room while fading
     document.querySelector('.room.active').classList.remove('active');
 
     if (where === 'left') {
@@ -149,7 +181,7 @@ function go(where) {
 
     // fade in
     fade.classList.remove('out');
-  }, 450); // duration of fade out
+  }, 450);
 }
 
 // check if im in backrooms
@@ -545,6 +577,9 @@ document.addEventListener("DOMContentLoaded", () => {
   currentIndex = 0;
 
   vnView.addEventListener("click", () => {
+
+    if (finishGame) return;
+
     if (currentIndex >= currentDialogue.length) {
 
       if (dialogueMode === "intro") {
@@ -563,35 +598,40 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 900);
 
         return;
-        }
-
-        else if (dialogueMode === "postgame") {
-          dialogueMode = "findcrystal";
-
-          fade.classList.add('out');
-
-          setTimeout(() => {
-            // close vn view
-            document.getElementById("vnView").style.opacity = "0";
-            document.getElementById("vnView").style.pointerEvents = "none";
-
-            // show navigation view
-            document.getElementById("north").style.opacity = "1";
-            document.getElementById("north").style.pointerEvents = "auto";
-
-            fade.classList.remove('out');
-
-            finishGame1Dialogue([
-              "Alright, I need to find a Dreamstone.",
-              "Where did I put them?",
-              "I think I had some in a chest somewhere."
-            ]);
-          }, 1500);
-          return;
-        }
-  return;
       }
-    
+
+      else if (dialogueMode === "postgame") {
+        dialogueMode = "findcrystal";
+
+        fade.classList.add('out');
+
+        setTimeout(() => {
+          // close vn view
+          document.getElementById("vnView").style.opacity = "0";
+          document.getElementById("vnView").style.pointerEvents = "none";
+
+          // show navigation view
+          document.getElementById("north").style.opacity = "1";
+          document.getElementById("north").style.pointerEvents = "auto";
+
+          fade.classList.remove('out');
+
+          finishGame1Dialogue([
+            "Alright, I need to find a Dreamstone.",
+            "Where did I put them?",
+            "I think I had some in a chest somewhere."
+          ]);
+        }, 1500);
+        return;
+      }
+
+      // any other dialogue mode (findcrystal, finalDay1, etc.)
+      // let advanceDialogue run so it can detect end-of-dialogue and
+      // show the finish screen or other appropriate behaviour
+      advanceDialogue();
+      return;
+    }
+
     advanceDialogue();
     });
 });
@@ -1098,7 +1138,7 @@ function finalDay1Dialogue() {
                 },
                 {
                   speaker: "player",
-                  text: "... She still left her camera here."
+                  text: "... She left her camera here."
                 },
                 {
                   speaker: "player",
@@ -1173,22 +1213,3 @@ function finalDay1Dialogue() {
 
   advanceDialogue();
 } 
-
-function showFinishScreen() {
-
-  const finishScreen = document.getElementById("finishScreen");
-  const finishText = document.getElementById("finishTimeText");
-
-  finishScreen.style.opacity = "1";
-  finishScreen.style.pointerEvents = "auto";
-
-  const totalTime = (performance.now() - timerStart);
-
-  const minutes = Math.floor(totalTime / 60000);
-  const seconds = Math.floor((totalTime % 60000) / 1000);
-  const milliseconds = Math.floor(totalTime % 1000);
-  const formatno = milliseconds.toString().padStart(3, "0");
-
-finishText.textContent =
-  `${minutes} min ${seconds} sec ${formatno} ms`;
-}
