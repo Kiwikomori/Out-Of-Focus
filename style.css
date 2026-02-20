@@ -185,13 +185,12 @@ button {
         z-index: 9999;
         display: grid;
         place-items: center;
+        text-align: center;
     }
     
     .finishtextwrap {
-        gap: 1px;
-        text-align: center;
+        gap: 2px;
     }
-
     .bigtext {
         font-size: 50px;
         color: #ffd890;

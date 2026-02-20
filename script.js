@@ -21,24 +21,29 @@ let isFinalDay1 = false;
 // timer
 let timerStart = 0;
 let timerInterval = null;
+// remember last puzzle duration (ms) so finish screen can display it
+let lastPuzzleTime = 0; // milliseconds
 
 function showFinishScreen() {
-
   const finishScreen = document.getElementById("finishScreen");
   const finishText = document.getElementById("finishTimeText");
 
   finishScreen.style.opacity = "1";
   finishScreen.style.pointerEvents = "auto";
 
-  const totalTime = (performance.now() - timerStart);
+  // use the stored duration if available, otherwise fall back to timerStart
+  let totalTime = lastPuzzleTime;
+  if (!totalTime && timerStart) {
+    totalTime = performance.now() - timerStart;
+  }
 
   const minutes = Math.floor(totalTime / 60000);
   const seconds = Math.floor((totalTime % 60000) / 1000);
   const milliseconds = Math.floor(totalTime % 1000);
-  const formatno = milliseconds.toString().padStart(2, "0");
+  const formatno = milliseconds.toString().padStart(3, "0");
 
-finishText.textContent =
-  `Time taken for puzzle:\n${minutes} min ${seconds} sec ${formatno} ms`;
+  finishText.textContent =
+    `${minutes} min ${seconds} sec ${formatno} ms`;
 }
 
 function advanceDialogue() {
@@ -900,9 +905,15 @@ function roundFail() {
 }
 
 function gameComplete() {
-  const totalTime = (performance.now() - timerStart) / 1000;
+  // calculate and log the puzzle time (seconds)
+  const durationMs = performance.now() - timerStart;
+  const totalTime = durationMs / 1000;
   console.log("Time taken:", totalTime.toFixed(2) + "s");
 
+  // remember duration for the finish screen display
+  lastPuzzleTime = durationMs;
+
+  // reset timer so next round can start fresh
   timerStart = 0;
 
   // reveal all
