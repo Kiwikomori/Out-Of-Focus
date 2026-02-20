@@ -1,5 +1,6 @@
 # Github Page URL
-https://kiwikomori.github.io/Out-Of-Focus/
+Website: https://kiwikomori.github.io/Out-Of-Focus/
+GitHub Repo: https://github.com/Kiwikomori/Out-Of-Focus
 
 # Out of Focus
 Run a quaint camera repair shop tucked away in a secluded alleyway inside a magical fantasy world. Take on the role of a camera repair shop owner, restoring enchanted cameras that carry fragments of memories, spells, and untold stories. Experience interactive repairs, discover collectibles, and customers with distinct personalities and dialogue. 
